@@ -4,20 +4,25 @@ cd $REPBOX_PREFIX
 
 PATH=$PATH$(find $REPBOX_PREFIX/bin -type d -exec echo ":{}" \; | tr -d '\n')
 
-$REPBOX_PREFIX/scripts/repeatmodel.sh
-pid1=$(pgrep repeatmodel.sh)
-while [ -d /proc/$pid1 ] ; do
-    sleep 2
-done $REPBOX_PREFIX/scripts/repeatmask.sh
+#$REPBOX_PREFIX/scripts/repeatmodel.sh
 
-pid2=$(pgrep repeatmask.sh)
-while [ -d /proc/$pid2 ] ; do
-    sleep 2
-done $REPBOX_PREFIX/scripts/eahelitron.sh
+#pid1=$(pgrep repeatmodel.sh)
+#while [ -d /proc/$pid1 ] ; do
+#    sleep 2
+#done
 
-$REPBOX_PREFIX/scripts/mitetracker.sh
-$REPBOX_PREFIX/scripts/sinescan.sh
-$REPBOX_PREFIX/scripts/mitefinder.sh
+#$REPBOX_PREFIX/scripts/repeatmask.sh
+
+#pid2=$(pgrep repeatmask.sh)
+#while [ -d /proc/$pid2 ] ; do
+#    sleep 2
+#done
+
+#$REPBOX_PREFIX/scripts/eahelitron.sh
+#$REPBOX_PREFIX/scripts/mitetracker.sh
+#$REPBOX_PREFIX/scripts/sinescan.sh
+#$REPBOX_PREFIX/scripts/mitefinder.sh
+
 ###$REPBOX_PREFIX/scripts/genericrepeatfinder.sh
 ###$REPBOX_PREFIX/scripts/helitronscanner.sh
 

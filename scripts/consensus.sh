@@ -11,9 +11,9 @@ INDEXNAME=$(basename $GENOME | cut -f 1 -d '.')
 #HELSCAN=$(ls $REPBOX_PREFIX/helitronscanner_out/helitronscanner_out*) -- Commented out due to HelitronScanner errors.
 # If successfully implemented, add $HELSCAN to FASTAARRAY below.
 
-GRF=$REPBOX_PREFIX/grf_out/mite.fasta
-SINSCN=$(ls $REPBOX_PREFIX/sinescan_out/$INDEXNAME-sinescan.fasta)
-MITEF=$(ls $REPBOX_PREFIX/mitefinder_out/$INDEXNAME.mite_finder.out)
+GRF=$REPBOX_PREFIX/grf_out/mite.fasta >/dev/null
+SINSCN=$(ls $REPBOX_PREFIX/sinescan_out/$INDEXNAME-sinescan.fasta) >/dev/null
+MITEF=$(ls $REPBOX_PREFIX/mitefinder_out/$INDEXNAME.mite_finder.out) >/dev/null
 FASTAARRAY=("$GRF" "$SINSCN" "$MITEF")
 
 # Make an index with the reference genome
@@ -40,11 +40,11 @@ done
 ###HELSCANGFF=$(ls $REPBOX_PREFIX/helitronscanner_out/*.gff3.)
 ###GRFGFF=$(ls $REPBOX_PREFIX/grf_out/mite*.gff3)
 
-SINEGFF=$(ls $REPBOX_PREFIX/sinescan_out/$INDEXNAME-sinescan*.gff3)
-MITEFGFF=$(ls $REPBOX_PREFIX/mitefinder_out/*.gff3)
-EAHELGFF=$(ls $REPBOX_PREFIX/eahelitron_out/*.gff3)
-MITEGFF=$(ls $REPBOX_PREFIX/mitetracker_out/$INDEXNAME/all.gff3)
-REPGFF=$(ls $REPBOX_PREFIX/repeatmasker_out/*fa.out.gff)
+SINEGFF=$(ls $REPBOX_PREFIX/sinescan_out/$INDEXNAME-sinescan*.gff3) >/dev/null
+MITEFGFF=$(ls $REPBOX_PREFIX/mitefinder_out/*.gff3) >/dev/null
+EAHELGFF=$(ls $REPBOX_PREFIX/eahelitron_out/*.gff3) >/dev/null
+MITEGFF=$(ls $REPBOX_PREFIX/mitetracker_out/$INDEXNAME/all.gff3) >/dev/null
+REPGFF=$(ls $REPBOX_PREFIX/repeatmasker_out/*fa.out.gff) >/dev/null
 
 ## Generation of consensus annotation
 echo "Generating consensus GTF..."
@@ -53,8 +53,8 @@ $REPBOX_PREFIX/bin/gffcompare/gffcompare $EAHELGFF $GRFGFF $MITEGFF $SINEGFF $MI
 ## Generation of consensus FASTA
 CONSGFF=$REPBOX_PREFIX/consensus_out/gffcmp.combined.gtf
 echo "Generating consensus FASTA..."
-sleep 2
+sleep 3
 
 $REPBOX_PREFIX/bin/gffread/gffread -w consensus_out.fa -g $GENOME $CONSGFF
-sleep 2
+sleep 3
 echo "Consensus complete..."

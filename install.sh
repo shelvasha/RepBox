@@ -11,8 +11,8 @@ fi
 
 if ! grep -q "PATH=$PATH$(find $REPBOX_PREFIX/bin -type d -exec echo ":{}" \; | tr -d '\n')" ~/.bash_profile; then
     echo "PATH=$PATH$(find $REPBOX_PREFIX/bin -type d -exec echo ":{}" \; | tr -d '\n')" >> ~/.bash_profile && source ~/.bash_profile
-fi
 
+fi
 export REPBOX_PREFIX=$HOME/Repbox
 export HOMEBREW_PREFIX=$(brew --prefix)
 

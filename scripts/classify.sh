@@ -2,10 +2,14 @@
 
 ## Repeat classification using RepeatClassifier
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    THREAD=$(sysctl -a | grep machdep.cpu | grep 'thread_count\|core_count'| grep -Eo '[0-9]{1,4}'| xargs | awk '{ for(j=i=1; i<=NF;i++) j*=$i; print j; j=0}' | xargs -n 1 expr -1 +)
+THREAD=$(expr $(sysctl -a | grep machdep.cpu | grep 'thread_count\|core_count'| grep -Eo '[0-9]{1,4}'| xargs | awk '{ for(j=i=1; i<=NF;i++) j*=$i; print j; j=0}') - 1)
 
 elif [[ "$OSTYPE" == "linux-gnu" ]]; then
-    THREAD=$(lscpu | grep 'Thread\|Core\|Socket'| grep -Eo '[0-9]{1,4}'| xargs | awk '{ for(j=i=1; i<=NF;i++) j*=$i; print j; j=0}' | xargs -n 1 expr -1 +)
+        THREAD=$(expr $(lscpu | grep 'Thread(s)\|Core(s)\|Socket(s)'| grep -Eo '[0-9]{1,4}'| xargs | awk '{ for(j=i=1; i<=NF;i++) j*=$i; print j; j=0}') - 1)
+fi
+
+if [[ $THREAD -lt 8 ]]; then
+    THREAD=4
 fi
 
 cd $REPBOX_PREFIX/consensus_out
@@ -35,7 +39,7 @@ cd $DIRECTORY
 vsearch -sortbylength merged-library.fa --output merged-library.sorted.fa --log vsearch.log
 
 ## Sequences are clustered into a single fasta based on >=80% sequence similarity using VSEARCH
-vsearch -cluster_fast merged-library.sorted.fa --id 0.8 --centroids my_centroids.fa --uc result.uc -consout final.nr.consensus.fa -msaout aligned.fasta --log vsearch2.log
+vsearch -cluster_fast merged-library.sorted.fa --id 0.80 --centroids my_centroids.fa --uc result.uc -consout final.nr.consensus.fa -msaout aligned.fasta --log vsearch2.log
 
 sed 's/centroid=*//' final.nr.consensus.fa | sed  's/;seqs=[0-9]//' > final.nr.consensus_edit.fa
 
@@ -45,15 +49,15 @@ mkdir RMLAST
 OUTPUT=RMLAST/ # echo $OUTPUT
 LIBRARY=$(ls $REPBOX_PREFIX/consensus_out/final.nr.consensus_edit.fa)
 NAME2=$(basename $GENOME)
-sleep 2
+sleep 3
 
 ## RepeatMasker command and parameters
 RepeatMasker -e rmblast -pa $THREAD -s -lib $LIBRARY -gff -dir $OUTPUT -u $GENOME #&&
-sleep 2
+sleep 3
 
 ## Create summary file of .out
 perl $HOMEBREW_PREFIX/opt/repeatmasker/libexec/util/buildSummary.pl RMLASt/*.fa.out > Summary-Repbox.txt
-sleep 2
+sleep 3
 
 perl $HOMEBREW_PREFIX/opt/repeatmasker/libexec/util/buildSummary.pl $REPBOX_PREFIX/repeatmasker_out/*.fa.out > Summary-RepeatMaskerModeler.txt
-sleep 2
+sleep 3

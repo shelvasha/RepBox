@@ -5,6 +5,17 @@ echo "Running Generic Repeat Finder..."
 # "mite.fasta": representative sequences of each MITE family.
 # "miteSet.fasta": all MITE sequences in each family; each family is separated by dashes.
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+THREAD=$(expr $(sysctl -a | grep machdep.cpu | grep 'thread_count\|core_count'| grep -Eo '[0-9]{1,4}'| xargs | awk '{ for(j=i=1; i<=NF;i++) j*=$i; print j; j=0}') - 1)
+
+elif [[ "$OSTYPE" == "linux-gnu" ]]; then
+        THREAD=$(expr $(lscpu | grep 'Thread(s)\|Core(s)\|Socket(s)'| grep -Eo '[0-9]{1,4}'| xargs | awk '{ for(j=i=1; i<=NF;i++) j*=$i; print j; j=0}') - 1)
+fi
+
+if [[ $THREAD -lt 8 ]]; then
+    THREAD=4
+fi
+
 cd $REPBOX_PREFIX/
 rm -rf grf_out
 mkdir grf_out
@@ -12,12 +23,7 @@ cd grf_out
 
 GENOME=$(ls $REPBOX_PREFIX/genome/*.{fas,fna,fa,fasta} 2>/dev/null)
 OUT_DIR=$(pwd)
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    THREAD=$(sysctl -a | grep machdep.cpu| grep 'thread_count\|core_count'|grep -Eo '[0-9]{1,4}'| xargs | awk '{ for(j=i=1; i<=NF;i++) j*=$i; print j; j=0}' | xargs -n 1 expr -1 +)
 
-elif [[ "$OSTYPE" == "linux-gnu" ]]; then
-    THREAD=$(lscpu | grep 'Thread\|Core\|Socket'|grep -Eo '[0-9]{1,4}'| xargs | awk '{ for(j=i=1; i<=NF;i++) j*=$i; print j; j=0}' | xargs -n 1 expr -1 +)
-fi
 #grf-main="$REPBOX_PREFIX/bin/GenericRepeatFinder/bin/grf-main"
 #grf-mite-cluster="$REPBOX_PREFIX/bin/GenericRepeatFinder/bin/grf-mite-cluster"
 

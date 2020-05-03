@@ -20,11 +20,10 @@ class Repeatmodeler < Formula
   depends_on "repeatmasker"
   depends_on "repeatscout"
   depends_on "rmblast"
-#  depends_on "trf"
-#  depends_on "genometools"
+  depends_on "trf"
+  depends_on "genometools"
   depends_on "mafft"
-#  depends_on "cd-hit"
-
+  depends_on "cd-hit"
 
 
   # Configure RepeatModeler. The prompts are:
@@ -48,16 +47,16 @@ class Repeatmodeler < Formula
      #{Formula["repeatmasker"].opt_prefix/"libexec"}
      #{Formula["recon"].opt_prefix/"bin"}
      #{Formula["repeatscout"].opt_prefix}
-     system "which trf"
+     #{Formula["trf"].opt_prefix/"bin"/"trf"}
      1
      #{Formula["rmblast"].opt_prefix/"bin"}
      3
      y
-     system "which gt"
-     system "which LTR_retriever"
+     #{Formula["genometools"].opt_prefix/"bin"}
+     LTR
      #{Formula["mafft"].opt_prefix/"bin"}
-     system "which NINJA"
-     system "which cd-hit-est"
+     NINJA
+     #{Formula["cd-hit"].opt_prefix/"bin"}
      EOS
  end
 

@@ -25,4 +25,4 @@ cd repeatmasker_out
 OUTPUT=$(pwd)
 
 ## Testing Directories
-RepeatMasker -pa $THREAD -e ncbi -s -lib $LIBRARY -gff -dir $OUTPUT -u $GENOME
+RepeatMasker -pa $THREAD -e ncbi -lib $LIBRARY -gff -dir $OUTPUT -u $GENOME

@@ -53,7 +53,7 @@ sleep 3
 
 ## RepeatMasker command and parameters
 cd $OUT
-RepeatMasker -e rmblast -pa $THREAD -s -lib $LIBRARY -gff -dir $OUTPUT -u $GENOME #&&
+RepeatMasker -e rmblast -pa $THREAD -lib $LIBRARY -gff -dir $OUTPUT -u $GENOME #&&
 sleep 3
 
 ## Create summary file of .out

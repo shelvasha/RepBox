@@ -24,7 +24,7 @@ options = {
 	'TSD_MIN_WORDSIZE': 5,
 	'TSD_MISMATCH_PENALTY': 1,
 	'TSD_SCORE_CUTOFF': 10,
-	'TSD_ORIENTATION': 'F',                 # possible: 'FR':
+	'TSD_ORIENTATION': 'FR',                 # possible: 'FR':
 	                                        # 'R' equal to 'F' but as 
 	                                        # a result of reverse search  
 	'CHUNKSIZE': 100000,
@@ -35,7 +35,7 @@ EXITCHAR = "qQ"
 
 # File extensions shown in the "file browser"
 
-extensions = ('fas','fasta','mfa',)
+extensions = ('fas','fasta','mfa','fa')
 
 
 ###########
@@ -698,13 +698,13 @@ class SINEFinder(MotifFinder):
 		'TSD_ORIENTATION': 'F', # possible: 'FR'
 		}
 
-	pattern = (
+	pattern = ( ## new pattern for wider search, Mao ang Wang  
 		('TSD_region_1', ".{,40}"), 
-		('a_box', "[GA][CGA]TGG"),
+		('a_box', "[GA][CGAT]TGG|TGGCTCACGCC|T[AG]G[CT]\w{2}A\w{3,4}G"),
 		('spacer_1', ".{25,50}"), 
-		('b_box', "GTTC[AG]A"), 
+		('b_box', "GTTC[AG]A|G[AT]TC[AG]A\w{2}C"), 
 		('spacer_2', ".{20,500}?"), 
-		('polyA', "A{6,}|T{6,}"), 
+		('polyA', "A{6,}|T{6,}|(A{1,}T{1,}){3,}"), 
 		('TSD_region_2', ".{,40}"), 
 		)
 
@@ -1081,7 +1081,7 @@ def main():
 	"""
 
 	try:
-
+		print "zhanjing"
 		# Help needed?
 
 		if '-d' in sys.argv:
@@ -1099,7 +1099,6 @@ def main():
 		# Under which mode should sine_finder run?
 
 		if len(sys.argv) == 1: 
-
 			# No arguments = interactive mode
 
 			title = " %s (version: %s) " % (__program_name__, __version_no__)
@@ -1258,7 +1257,6 @@ def main():
 				continue
 
 		else:
-
 			# Arguments specified = commandline mode
 
 			# - Get infiles
@@ -1380,4 +1378,5 @@ def main():
 
 if __name__ == "__main__":
 	main()
+
 

@@ -24,7 +24,7 @@ options = {
 	'TSD_MIN_WORDSIZE': 5,
 	'TSD_MISMATCH_PENALTY': 1,
 	'TSD_SCORE_CUTOFF': 10,
-	'TSD_ORIENTATION': 'F',                 # possible: 'FR':
+	'TSD_ORIENTATION': 'FR',                 # possible: 'FR':
 	                                        # 'R' equal to 'F' but as 
 	                                        # a result of reverse search  
 	'CHUNKSIZE': 100000,
@@ -35,7 +35,7 @@ EXITCHAR = "qQ"
 
 # File extensions shown in the "file browser"
 
-extensions = ('fas','fasta','mfa',)
+extensions = ('fas','fasta','mfa','fa')
 
 
 ###########
@@ -568,6 +568,7 @@ class MotifFinder:
 
 		if direct == 'F':
 			m = re.search(self.p, self.seq[offset:], re.I)
+		#	m = re.search('(?P<TSD_region_1>.{,70})(?P<a_box>[ATC][AG]G[CT][CT]AAGC)(?P<spacer_1>.{20,50})(?P<b_box>[AG]TGG[AG][ATG]GAC)(?P<spacer_2>.{20,500}?)(?P<polyA>\w{3,6})(?P<repeat>\\6{2,})(?P<TSD_region_2>.{,40})', self.seq[offset:], re.I)
 		elif direct == 'R':
 			m = re.search(self.p, self.rseq[offset:], re.I)
 		if m:
@@ -699,12 +700,13 @@ class SINEFinder(MotifFinder):
 		}
 
 	pattern = (
-		('TSD_region_1', ".{,40}"), 
-		('a_box', "[GA][CGA]TGG"),
-		('spacer_1', ".{25,50}"), 
-		('b_box', "GTTC[AG]A"), 
+		('TSD_region_1', ".{,70}"), 
+		('a_box', "[ATC][AG]G[CT][CT]AAGC"),
+		('spacer_1', ".{20,70}"), 
+		('b_box', "[AG]TGG[AG][ATG]GAC"), 
 		('spacer_2', ".{20,500}?"), 
-		('polyA', "A{6,}|T{6,}"), 
+		('polyA', "\w{2,6}"), 
+		('RepolyA', "\\6{3,}"), 
 		('TSD_region_2', ".{,40}"), 
 		)
 
@@ -1028,7 +1030,7 @@ def run(seqfile, **kwargs):
 	fi = FastaIterator(seqfile, **kwargs)
 	sf = SINEFinder(**kwargs)
 	
-	matchfile = '.'.join(seqfile.split('.')[:-1]) + "-matches"
+	matchfile = '.'.join(seqfile.split('.')[:-1]) + "-5smatches"
 	fw = {}
 	if kwargs['OUTTYPE'] in ('fasta', 'both'):
 		fw['fasta'] = open("%s.fasta" % matchfile, 'a')
@@ -1081,7 +1083,7 @@ def main():
 	"""
 
 	try:
-
+		print "zhanjing"
 		# Help needed?
 
 		if '-d' in sys.argv:
@@ -1099,7 +1101,6 @@ def main():
 		# Under which mode should sine_finder run?
 
 		if len(sys.argv) == 1: 
-
 			# No arguments = interactive mode
 
 			title = " %s (version: %s) " % (__program_name__, __version_no__)
@@ -1258,7 +1259,6 @@ def main():
 				continue
 
 		else:
-
 			# Arguments specified = commandline mode
 
 			# - Get infiles
@@ -1380,4 +1380,5 @@ def main():
 
 if __name__ == "__main__":
 	main()
+
 

@@ -87,7 +87,7 @@ if(! -x $Muscle){
 #system "cp $SINE_Scan_Dir/NPL/*.npl $SINE_Scan_Dir";
 @NPL_Files=('ABbox_check.npl','rg_mainscript.npl','RG_boundary.npl','CheckEnd.npl','clusterSeqs.npl','betterSeq-seeds.npl','New_checkboundaryAndTSD.npl','classification-stronghit.anno.npl','extendseq.npl','getSINE-noTSD.npl','getStrongHit.npl','mainpipeline.npl','makeDirforTE.npl','SINEs-annotation.npl','SINE_Scan_process.npl','sines-extract.anno.npl','bls2gtf.npl');
 foreach(@NPL_Files) {
-	if(-e "$SINE_Scan_Dir/NPL/$_"){	
+	if(-e "$SINE_Scan_Dir/NPL/$_"){
 	}else{
 		print "$_ can not be found! Please check the NPL directory.\n";
 		exit 0;
@@ -115,7 +115,7 @@ foreach(@NPL_Files) {
 		$Line =~ s/_bedtools_/$Bedtools/;
 		$Line =~ s/_stretcher_/$stretcher/;
 		$Line =~ s/_SINEsbase_/$SINEs_dataFile/;
-		$Line =~ s/_RNAbase_/$RNA_dataFile/;		
+		$Line =~ s/_RNAbase_/$RNA_dataFile/;
 		print(PL "$Line\n");
 	}
 	close(RF);
@@ -138,7 +138,7 @@ SYNOPSIS: SINE_Scan_process.pl <options>
 All parameters, except for -n and -h, are required, we advise users that you should use the absoulte path.
 
 	-d	string		The directory of SINE_Scan pipeline
-	-a	string		The path of SINE-FINDER.py 
+	-a	string		The path of SINE-FINDER.py
 	-f	string		The path of "makeblastdb" command, which belongs to blast+, not legacy blast
 	-b	string		The path of "blastn" command, which belongs to blast+, not legacy blast
 	-c	string		The path of "cd-hit-est" command

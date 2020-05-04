@@ -77,8 +77,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     #xcode-select --install
 
     brew install llvm libomp gcc@9
-    echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.bash_profile
-
+    if ! grep -q 'export PATH="/usr/local/opt/llvm/bin:$PATH"' ~/.bash_profile; then
+        echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.bash_profile && source ~/.bash_profile
+    fi
     #cd $REPBOX_PREFIX/bin/GenericRepeatFinder/src/grf-main && make clean && make
     cd $REPBOX_PREFIX/bin/cd-hit-v4.6.1/
     make clean && make

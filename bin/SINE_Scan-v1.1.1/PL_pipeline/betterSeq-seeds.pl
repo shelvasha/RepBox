@@ -74,7 +74,7 @@ if($matchNum == 0){
 }
 
 my $output=$file.".better.out";
-system "/usr/local/Cellar/muscle/3.8.1551/bin/muscle -in $outfile -out $output -maxiters 1 -diags -quiet";
+system "/usr/local/bin/muscle -in $outfile -out $output -maxiters 1 -diags -quiet";
 open IN,$output or die "$!\n";
 while(defined($line=<IN>)){
 	chomp $line;

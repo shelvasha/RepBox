@@ -30,7 +30,7 @@ print "Create working dir: $workdir\n";
 
 print "\nMake directory for each TE:\n";
 my $filtersines=$ARGV[0];
-system "perl ./PL_pipeline/makeDirforTE.pl $filtersines  $workdir";
+system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/makeDirforTE.pl $filtersines  $workdir";
 open in,$filtersines or die "$!\n";
 my %map=();
 my %chr=();
@@ -92,7 +92,7 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 		print "Its path is: $path\n";
 		print "TE sequence: $path/$name.sine.fa\n";
 		print "Scan genome using a file above: $path/$name.sine.genome.bls\n";
-		system "/usr/local/Cellar/blast/2.10.0/bin/blastn -task blastn -db $genome -query $path/$name.sine.fa -max_target_seqs 100000 -evalue 1e-10 -dust no -out $path/$name.sine.genome.bls -num_threads $CPU -outfmt 6";
+		system "/usr/local/bin/blastn -task blastn -db $genome -query $path/$name.sine.fa -max_target_seqs 100000 -evalue 1e-10 -dust no -out $path/$name.sine.genome.bls -num_threads $CPU -outfmt 6";
 		open in,"$path/$name.sine.fa" or die "$!\n";
 		my $query_length=0;
 		while(<in>){
@@ -168,12 +168,12 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 		close fout;
 
 		print "Extract $p best hits: $path/$name.sine.extendseq\n";
-		system "perl ./PL_pipeline/extendseq.pl $path/$name.sine.genome.filter $genome $sizeFlank >$path/$name.sine.extendseq";
+		system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/extendseq.pl $path/$name.sine.genome.filter $genome $sizeFlank >$path/$name.sine.extendseq";
 
 #####check end ,TSD-finder then output a good seed sequence for next-step (annotation)############
 ###step first: checkend and TSD-finder#######
-		my $scores=`perl ./PL_pipeline/New_checkboundaryAndTSD.pl $path/$name.sine.extendseq $sizeFlank $sizeEnd $minDiff $SupFL $InfM $minIden $maxDis $blockLen $siteP`;
-		system "/usr/local/Cellar/muscle/3.8.1551/bin/muscle -in $path/$name.sine.extendseq -out $path/$name.sine.extendseq.msa.fasta -maxiters 1 -diags -quiet";
+		my $scores=`perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/New_checkboundaryAndTSD.pl $path/$name.sine.extendseq $sizeFlank $sizeEnd $minDiff $SupFL $InfM $minIden $maxDis $blockLen $siteP`;
+		system "/usr/local/bin/muscle -in $path/$name.sine.extendseq -out $path/$name.sine.extendseq.msa.fasta -maxiters 1 -diags -quiet";
 		chomp $scores;
 		my @score=split(/,/,$scores);
 		if(@score == 1 && $scores == 1){
@@ -197,7 +197,7 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 		print "You could manually evaluate alignment ends using the $path/$name.sine.extendseq.SixtyFiftySixty.msa.fasta\n";
 		print "cluster $name is ready for inspection\n";
 		if($scores == 1){
-			system "perl ./PL_pipeline/betterSeq-seeds.pl $path/$name.sine.extendseq";
+			system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/betterSeq-seeds.pl $path/$name.sine.extendseq";
 			my $annotation=basename($workdir).".for_annotation.fa";########annotation file in workdir
 			if(-e "$path/$name.sine.for_annotation.fa"){
 				system "cat $path/$name.sine.for_annotation.fa >>$workdir/$annotation";

@@ -54,7 +54,7 @@ if($cpu eq ""){
 
 ###Recheck a-box and b-box###
 =pod
-system "perl ./PL_pipeline/ABbox_check.pl $TEfile";
+system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/ABbox_check.pl $TEfile";
 system "cat $TEfile >$TEfile.tmp2";
 system "cat $TEfile.tmp >$TEfile";
 system "cat $TEfile.tmp2 >$TEfile.tmp";
@@ -71,17 +71,17 @@ system "rm $TEfile.tmp2 $TEfile.note";
 =cut
 #######
 
-system "/usr/local/Cellar/blast/2.10.0/bin/makeblastdb -in $TEfile -dbtype nucl";
-system "/usr/local/Cellar/blast/2.10.0/bin/makeblastdb -in ./SINEBase/SineDatabase.fasta -dbtype nucl";
+system "/usr/local/bin/makeblastdb -in $TEfile -dbtype nucl";
+system "/usr/local/bin/makeblastdb -in /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/SINEBase/SineDatabase.fasta -dbtype nucl";
 
 #######main pipeline####################
 my $SINEs=$out_prefix.".sines";
 my $seq=$out_prefix.".seq.sine.fa";
 my $List=$out_prefix.".assignRegionToTE.normal";
-system "perl ./PL_pipeline/getStrongHit.pl $TEfile $genomefile $out_prefix $cpu >$log";
+system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/getStrongHit.pl $TEfile $genomefile $out_prefix $cpu >$log";
 if(-s $List){
-	system "perl ./PL_pipeline/sines-extract.anno.pl $List $genomefile >$seq";
-	system "perl ./PL_pipeline/classification-stronghit.anno.pl $seq $out_prefix $species_name $cdhit_identity $cdhit_length $identity_coverage $trna_identity $trna_overlap $outputDir $TEfile >>$log";
+	system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/sines-extract.anno.pl $List $genomefile >$seq";
+	system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/classification-stronghit.anno.pl $seq $out_prefix $species_name $cdhit_identity $cdhit_length $identity_coverage $trna_identity $trna_overlap $outputDir $TEfile >>$log";
 } 
 system "rm $out_prefix.*";
 #########################################

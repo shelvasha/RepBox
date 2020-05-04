@@ -1,7 +1,7 @@
 ####here we want to find TSDs and check boundary######
 #!usr/bin/perl
 use strict;
-use lib './modules';
+use lib '/Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/modules';
 use Statistics::Basic qw(:all);
 use Bio::SimpleAlign;
 use Bio::AlignIO;
@@ -54,7 +54,7 @@ while($label=<fin>){
 }
 close fout;
 close fin;
-system "/usr/local/Cellar/muscle/3.8.1551/bin/muscle -in $outfile.fasta -out $outfile.msa.fasta -maxiters 1 -diags -quiet";
+system "/usr/local/bin/muscle -in $outfile.fasta -out $outfile.msa.fasta -maxiters 1 -diags -quiet";
 ####find 60 50 60 positions in MSA #####
 my @positionA=();
 my @positionB=();
@@ -303,7 +303,7 @@ if($SINEs == 1){
 			open fout, ">$file.tsd.fa" or die "$!\n";
 			print fout">one\n$ser\n>two\n$Ser\n";
 			close fout;
-			system "/usr/local/Cellar/muscle/3.8.1551/bin/muscle -in $file.tsd.fa -out $file.tsd.msa.fasta -maxiters 1 -diags -quiet";
+			system "/usr/local/bin/muscle -in $file.tsd.fa -out $file.tsd.msa.fasta -maxiters 1 -diags -quiet";
 			if(! -e "$file.tsd.msa.fasta"){
 				next;
 			}
@@ -397,7 +397,7 @@ sub MITE_test{
 	open out,">$file.mite.test.fa" or die "$!\n";
 	print out">1\n$head\n>2\n$tail\n";
 	close out;
-	system "/usr/local/Cellar/muscle/3.8.1551/bin/muscle -in $file.mite.test.fa -out $file.mite.fasta -maxiters 1 -diags -quiet";
+	system "/usr/local/bin/muscle -in $file.mite.test.fa -out $file.mite.fasta -maxiters 1 -diags -quiet";
 	if(! -e "$file.mite.fasta"){
 		return 0;
 	}

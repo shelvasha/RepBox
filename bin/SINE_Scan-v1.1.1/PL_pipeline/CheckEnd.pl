@@ -1,7 +1,7 @@
 ####here we want to find TSDs and check boundary######
 #!usr/bin/perl
 use strict;
-use lib './modules';
+use lib '/Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/modules';
 use Statistics::Basic qw(:all);
 use File::Basename;
 use Bio::SimpleAlign;
@@ -46,7 +46,7 @@ while($label=<fin>){
 }
 close fout;
 close fin;
-system "/usr/local/Cellar/muscle/3.8.1551/bin/muscle -in $outfile.fasta -out $outfile.msa.fasta -maxiters 1 -diags -quiet";
+system "/usr/local/bin/muscle -in $outfile.fasta -out $outfile.msa.fasta -maxiters 1 -diags -quiet";
 ####find 60 50 60 positions in MSA #####
 my @positionA=();
 my @positionB=();

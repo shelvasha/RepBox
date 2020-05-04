@@ -28,4 +28,4 @@ DIRECTORY=$(pwd)
 cd $REPBOX_PREFIX/bin/SINE_Scan-v1*/
 perl SINE_Scan_process.pl -g $GENOME -d $DIRECTORY -o $INDEXNAME -s 123 -k $THREAD
 
-#mv $INDEXNAME*-matches.fasta $INDEXNAME-sinescan.fasta
+mv *.sine.fasta $INDEXNAME-sinescan.fasta

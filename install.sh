@@ -46,13 +46,13 @@ cp $REPBOX_PREFIX/bin/brew/repeatmodeler.rb $HOMEBREW_PREFIX/Homebrew/Library/Ta
 brew install trf emboss bowtie2 bedtools hmmer recon blast rmblast bioperl samtools repeatscout repeatmasker repeatmodeler muscle
 
 # Setting up RepeatModeler & RepeatMasker
-cpan JSON File::Which URI LWP::UserAgent Readonly Log::Log4perl Bio::SeqIO
+#cpan JSON File::Which URI LWP::UserAgent Readonly Log::Log4perl Bio::SeqIO
 
 cp $REPBOX_PREFIX/bin/rmodel_dependencies/* $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/
 sleep 2
 
-grep -rl 'LTR' $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/config.txt |  xargs sed -i "" "s|LTR|$REPBOX_PREFIX/bin/LTR_retriever|g"
-grep -rl 'NINJA' $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/config.txt |  xargs sed -i "" "s|NINJA|$REPBOX_PREFIX/bin/NINJA-0.95-cluster_only/NINJA/|g"
+#grep -rl 'LTR' $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/config.txt |  xargs sed -i "" "s|LTR|$REPBOX_PREFIX/bin/LTR_retriever|g"
+#grep -rl 'NINJA' $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/config.txt |  xargs sed -i "" "s|NINJA|$REPBOX_PREFIX/bin/NINJA-0.95-cluster_only/NINJA/|g"
 
 cd $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/
 perl ./configure <config.txt &>/dev/null
@@ -63,11 +63,11 @@ perl ./configure <config.txt &>/dev/null
 cd $REPBOX_PREFIX/bin/SINE_Scan-v1.1.1
 bash ./SINE_Scan_Directories.sh
 
-cd $REPBOX_PREFIX/bin/
-git clone https://github.com/genometools/genometools.git
-cd genometools
-make make -j4 cairo=no
-make install -j4
+#cd $REPBOX_PREFIX/bin/
+#git clone https://github.com/genometools/genometools.git
+#cd genometools
+#make make -j4 cairo=no
+#make install -j4
 
 ### MacOS check
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -80,7 +80,10 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     if ! grep -q 'export PATH="/usr/local/opt/llvm/bin:$PATH"' ~/.bash_profile; then
         echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.bash_profile && source ~/.bash_profile
     fi
-    #cd $REPBOX_PREFIX/bin/GenericRepeatFinder/src/grf-main && make clean && make
+
+    #cd $REPBOX_PREFIX/bin/GenericRepeatFinder/src/grf-main
+    #make clean && make
+
     cd $REPBOX_PREFIX/bin/cd-hit-v4.6.1/
     make clean && make
 
@@ -96,6 +99,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
 ### Linux check
 elif [[ "$OSTYPE" == "linux-gnu" ]]; then
+
+    brew install gcc
+
     #cd $REPBOX_PREFIX/bin/GenericRepeatFinder/src
     #make clean && make
 

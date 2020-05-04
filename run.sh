@@ -53,12 +53,6 @@ for folder in $(ls -d *_out)
 do
     mv $folder $REPBOX_PREFIX/results_$INDEXNAME;
 done;
-sleep 2
-
-for folder in $(ls $REPBOX_PREFIX/results_$INDEXNAME/consensus_out/*.txt)
-do
-    mv $folder $REPBOX_PREFIX/results_$INDEXNAME;
-done;
 
 sleep 2
 

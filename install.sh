@@ -9,9 +9,9 @@ if ! grep -q "HOMEBREW_PREFIX" ~/.bash_profile; then
     echo "export HOMEBREW_PREFIX='$(brew --prefix)'" >> ~/.bash_profile && source ~/.bash_profile
 fi
 
-#if ! grep -q "PATH=$PATH$(find $REPBOX_PREFIX/bin -type d -exec echo ":{}" \; | tr -d '\n')" ~/.bash_profile; then
-#    echo "PATH=$PATH$(find $REPBOX_PREFIX/bin -type d -exec echo ":{}" \; | tr -d '\n')" >> ~/.bash_profile && source ~/.bash_profile
-#fi
+if ! grep -q "PATH=$PATH$(find $REPBOX_PREFIX/bin -type d -exec echo ":{}" \; | tr -d '\n')" ~/.bash_profile; then
+    echo "PATH=$PATH$(find $REPBOX_PREFIX/bin -type d -exec echo ":{}" \; | tr -d '\n')" >> ~/.bash_profile && source ~/.bash_profile
+fi
 
 export REPBOX_PREFIX=$HOME/Repbox
 export HOMEBREW_PREFIX=$(brew --prefix)
@@ -47,7 +47,7 @@ brew install trf emboss bowtie2 bedtools hmmer recon blast rmblast samtools repe
 #perl, bioperl
 
 # Setting up RepeatModeler & RepeatMasker
-sudo cpan JSON File::Which URI LWP::UserAgent Readonly Log::Log4perl Bio::SeqIO
+#sudo cpan JSON File::Which URI LWP::UserAgent Readonly Log::Log4perl Bio::SeqIO
 
 cp $REPBOX_PREFIX/bin/rmodel_dependencies/* $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/
 sleep 2
@@ -79,8 +79,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     cd $REPBOX_PREFIX/bin/miteFinder
     make clean && make
 
-    cd $REPBOX_PREFIX/bin/SINE_Scan-v1.1.1
-    bash ./SINE_Scan_Directories.sh
+    #cd $REPBOX_PREFIX/bin/SINE_Scan-v1.1.1
+    #bash ./SINE_Scan_Directories.sh
 
 ### Linux check
 elif [[ "$OSTYPE" == "linux-gnu" ]]; then
@@ -116,10 +116,10 @@ fi
 #grep -rl 'NINJA' $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/config.txt |  xargs sed -i "" "s|NINJA|$REPBOX_PREFIX/bin/NINJA-0.95-cluster_only/NINJA/|g"
 
 cd $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/
-perl ./configure <config.txt &>/dev/null
+perl ./configure <config.txt # &>/dev/null
 
 cd $HOMEBREW_PREFIX/Cellar/repeatmasker/*/libexec
-perl ./configure <config.txt &>/dev/null
+perl ./configure <config.txt # &>/dev/null
 
 
 echo "Repbox setup is complete!"

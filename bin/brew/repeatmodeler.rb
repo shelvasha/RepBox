@@ -1,6 +1,8 @@
 # Documentation: https://docs.brew.sh/Formula-Cookbook
 #                https://rubydoc.brew.sh/Formula
 # PLEASE REMOVE ALL GENERATED COMMENTS BEFORE SUBMITTING YOUR PULL REQUEST!
+require 'open3'
+
 class Repeatmodeler < Formula
   desc "De-novo repeat family identification and modeling package"
   homepage "http://www.repeatmasker.org/RepeatModeler.html"
@@ -38,27 +40,46 @@ class Repeatmodeler < Formula
   # Do you want RMBlast to be your default search engine for Repeatmasker?
   # 3. Done
 
-  def install
-   prefix.install Dir["*"]
-   bin.install_symlink %w[../BuildDatabase ../RepeatModeler]
-   (prefix/"config.txt").write <<~EOS
+  def which(cmd)
+    exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+    ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+      exts.each do |ext|
+        exe = File.join(path, "#{cmd}#{ext}")
+        return exe if File.executable?(exe) && !File.directory?(exe)
+      end
+    end
+    nil
+  end
 
-     system "which perl"
-     system "which RepeatMasker"
-     #{Formula["recon"].opt_prefix/"bin"}
-     system "which RepeatScout"
-     system "which trf"
-     1
-     #{Formula["rmblast"].opt_prefix/"bin"}
-     3
-     y
-     system "which gt"
-     system "which LTR_retriever"
-     #{Formula["mafft"].opt_prefix/"bin"}
-     system "which NINJA"
-     system "which cd-hit-est"
-     EOS
- end
+  def install
+
+prefix.install Dir["*"]
+bin.install_symlink %w[../BuildDatabase ../RepeatModeler]
+
+perl=which('perl')
+ltrretriever=which('LTR_retriever')
+ninja=which('NINJA')
+cdhit=which('cd-hit-est')
+
+open(prefix/'config.txt', 'w') do |f|
+#(prefix/"config.txt").write <<~EOS
+f.puts "
+#{perl}
+#{Formula["repeatmasker"].opt_prefix/"bin"}
+#{Formula["recon"].opt_prefix/"bin"}
+#{ENV["HOMEBREW_PREFIX"]}/Cellar/repeatscout/1.0.6
+#{Formula["trf"].opt_prefix/"bin"/"trf"}
+1
+#{Formula["rmblast"].opt_prefix/"bin"}
+3
+y
+#{Formula["genometools"].opt_prefix/"bin"}
+#{ENV["HOMEBREW_PREFIX"]}/bin/LTR_retriever/
+#{Formula["mafft"].opt_prefix/"bin"}
+#{ENV["HOMEBREW_PREFIX"]}/bin/NINJA-0.95-cluster_only/NINJA/
+#{cdhit}"
+end
+end
 
  def post_install
    cd prefix/Cellar/repeatmodeler/Dir["*"] do

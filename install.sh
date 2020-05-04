@@ -47,7 +47,7 @@ brew install trf emboss bowtie2 bedtools hmmer recon blast rmblast samtools repe
 #perl, bioperl
 
 # Setting up RepeatModeler & RepeatMasker
-cpan JSON File::Which URI LWP::UserAgent Readonly Log::Log4perl Bio::SeqIO
+sudo cpan JSON File::Which URI LWP::UserAgent Readonly Log::Log4perl Bio::SeqIO
 
 cp $REPBOX_PREFIX/bin/rmodel_dependencies/* $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/
 sleep 2

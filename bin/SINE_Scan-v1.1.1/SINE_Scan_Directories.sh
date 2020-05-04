@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # SINE_Scan installation commands
-#cpan Bio::AlignIO Bio::Align Bio::PairwiseStatistics Bio::SimpleAlign Getopt::Long File::Basename Get::Sdt Bio::SeqIO Bio::Seq Bio::Tools::Run::StandAloneBlast Bio::SearchIO Statistics::Basic Parallel::ForkManager
+sudo cpan Bio::AlignIO Bio::Align Bio::PairwiseStatistics Bio::SimpleAlign Getopt::Long File::Basename Get::Sdt Bio::SeqIO Bio::Seq Bio::Tools::Run::StandAloneBlast Bio::SearchIO Statistics::Basic Parallel::ForkManager
 #brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/86a44a0a552c673a05f11018459c9f5faae3becc/Formula/python@2.rb
 brew install dos2unix
 

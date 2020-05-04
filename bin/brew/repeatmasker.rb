@@ -33,8 +33,7 @@ class Repeatmasker < Formula
     # 8. Done
 
     (libexec/"config.txt").write <<~EOS
-
-    system "which trf"
+    #{HOMEBREW_PREFIX}/opt/trf/bin/trf
     2
     #{HOMEBREW_PREFIX}/opt/rmblast/bin
     Y

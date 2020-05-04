@@ -21,9 +21,9 @@ class Repeatmodeler < Formula
   depends_on "repeatscout"
   depends_on "rmblast"
   depends_on "trf"
-  depends_on "genometools"
   depends_on "mafft"
-  depends_on "cd-hit"
+#  depends_on "genometools"
+#  depends_on "cd-hit"
 
 
   # Configure RepeatModeler. The prompts are:
@@ -43,20 +43,20 @@ class Repeatmodeler < Formula
    bin.install_symlink %w[../BuildDatabase ../RepeatModeler]
    (prefix/"config.txt").write <<~EOS
 
-     /usr/bin/perl
-     #{Formula["repeatmasker"].opt_prefix/"libexec"}
+     system "which perl"
+     system "which RepeatMasker"
      #{Formula["recon"].opt_prefix/"bin"}
-     #{Formula["repeatscout"].opt_prefix}
-     #{Formula["trf"].opt_prefix/"bin"/"trf"}
+     system "which RepeatScout"
+     system "which trf"
      1
      #{Formula["rmblast"].opt_prefix/"bin"}
      3
      y
-     #{Formula["genometools"].opt_prefix/"bin"}
-     LTR
+     system "which gt"
+     system "which LTR_retriever"
      #{Formula["mafft"].opt_prefix/"bin"}
-     NINJA
-     #{Formula["cd-hit"].opt_prefix/"bin"}
+     system "which NINJA"
+     system "which cd-hit-est"
      EOS
  end
 

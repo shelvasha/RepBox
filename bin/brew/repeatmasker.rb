@@ -14,7 +14,8 @@ class Repeatmasker < Formula
 
   def install
     perl = if build.with? "perl"
-      Formula["perl"].opt_bin/"perl"
+        system "which perl"
+#      Formula["perl"].opt_bin/"perl"
     else
       system "which perl"
     end
@@ -38,13 +39,13 @@ class Repeatmasker < Formula
     # 8. Done
 
     (libexec/"config.txt").write <<~EOS
-    #{HOMEBREW_PREFIX}/opt/trf/bin/trf
+    system "which trf"
     2
     #{HOMEBREW_PREFIX}/opt/rmblast/bin
     Y
     3
     #{HOMEBREW_PREFIX}/bin
-    N
+    Y
     5
     EOS
 

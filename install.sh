@@ -63,14 +63,15 @@ perl ./configure <config.txt &>/dev/null
 cd $REPBOX_PREFIX/bin/SINE_Scan-v1.1.1
 bash ./SINE_Scan_Directories.sh
 
-#cd $REPBOX_PREFIX/bin/
-#git clone https://github.com/genometools/genometools.git
-#cd genometools
-#make make -j4 cairo=no
-#make install -j4
+cd $REPBOX_PREFIX/bin/
+git clone https://github.com/genometools/genometools.git
+cd genometools
+make -j4 cairo=no
+make install -j4
 
 ### MacOS check
 if [[ "$OSTYPE" == "darwin"* ]]; then
+
     # Install Commandline Tools
     #rm -rf /Library/Developer/CommandLineTools
     #sudo xcode-select -s /Library/Developer/CommandLineTools

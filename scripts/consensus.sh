@@ -11,9 +11,9 @@ INDEXNAME=$(basename $GENOME | cut -f 1 -d '.')
 #HELSCAN=$(ls $REPBOX_PREFIX/helitronscanner_out/helitronscanner_out*) -- Commented out due to HelitronScanner errors.
 # If successfully implemented, add $HELSCAN to FASTAARRAY below.
 
-GRF=$REPBOX_PREFIX/grf_out/mite.fasta >/dev/null
-SINSCN=$(ls $REPBOX_PREFIX/sinescan_out/$INDEXNAME-sinescan.fasta) >/dev/null
-MITEF=$(ls $REPBOX_PREFIX/mitefinder_out/$INDEXNAME.mite_finder.out) >/dev/null
+GRF=$REPBOX_PREFIX/grf_out/mite.fasta 2>/dev/null
+SINSCN=$(ls $REPBOX_PREFIX/sinescan_out/$INDEXNAME-sinescan.fasta) 2>/dev/null
+MITEF=$(ls $REPBOX_PREFIX/mitefinder_out/$INDEXNAME.mite_finder.out) 2>/dev/null
 FASTAARRAY=("$GRF" "$SINSCN" "$MITEF")
 
 # Make an index with the reference genome
@@ -25,26 +25,26 @@ do
    FASTA=$i
    OUT=$FASTA
    # Align Fasta reads to reference
-   bowtie2 -f -x $INDEXNAME -U $FASTA -S $OUT.sam
+   bowtie2 -f -x $INDEXNAME -U $FASTA -S $OUT.sam 2>/dev/null
 
    # Convert SAM to BAM
-   samtools view -bS $OUT.sam > $OUT.bam
+   samtools view -bS $OUT.sam > $OUT.bam 2>/dev/null
 
    # BAM to BED
-   bedtools bamtobed -i $OUT.bam > $OUT.bed
+   bedtools bamtobed -i $OUT.bam > $OUT.bed 2>/dev/null
 
    # BED to GFF3
-   $REPBOX_PREFIX/bin/gffread/gffread $OUT.bed > $OUT.gff3
+   $REPBOX_PREFIX/bin/gffread/gffread $OUT.bed > $OUT.gff3 2>/dev/null
 done
 
 ###HELSCANGFF=$(ls $REPBOX_PREFIX/helitronscanner_out/*.gff3.)
 ###GRFGFF=$(ls $REPBOX_PREFIX/grf_out/mite*.gff3)
 
-SINEGFF=$(ls $REPBOX_PREFIX/sinescan_out/$INDEXNAME-sinescan*.gff3) >/dev/null
-MITEFGFF=$(ls $REPBOX_PREFIX/mitefinder_out/*.gff3) >/dev/null
-EAHELGFF=$(ls $REPBOX_PREFIX/eahelitron_out/*.gff3) >/dev/null
-MITEGFF=$(ls $REPBOX_PREFIX/mitetracker_out/$INDEXNAME/all.gff3) >/dev/null
-REPGFF=$(ls $REPBOX_PREFIX/repeatmasker_out/*fa.out.gff) >/dev/null
+SINEGFF=$(ls $REPBOX_PREFIX/sinescan_out/$INDEXNAME-sinescan*.gff3) 2>/dev/null
+MITEFGFF=$(ls $REPBOX_PREFIX/mitefinder_out/*.gff3) 2>/dev/null
+EAHELGFF=$(ls $REPBOX_PREFIX/eahelitron_out/*.gff3) 2>/dev/null
+MITEGFF=$(ls $REPBOX_PREFIX/mitetracker_out/$INDEXNAME/all.gff3) 2>/dev/null
+REPGFF=$(ls $REPBOX_PREFIX/repeatmasker_out/*fa.out.gff) 2>/dev/null
 
 ## Generation of consensus annotation
 echo "Generating consensus GTF..."

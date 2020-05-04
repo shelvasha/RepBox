@@ -52,6 +52,7 @@ NAME2=$(basename $GENOME)
 sleep 3
 
 ## RepeatMasker command and parameters
+cd $OUT
 RepeatMasker -e rmblast -pa $THREAD -s -lib $LIBRARY -gff -dir $OUTPUT -u $GENOME #&&
 sleep 3
 

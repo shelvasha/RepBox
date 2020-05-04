@@ -44,10 +44,12 @@ cp $REPBOX_PREFIX/bin/brew/repeatmodeler.rb $HOMEBREW_PREFIX/Homebrew/Library/Ta
 
 ### Installs Repbox dependencies via home/linuxbrew
 brew install trf emboss bowtie2 bedtools hmmer recon blast rmblast samtools repeatscout repeatmasker repeatmodeler muscle
-#perl, bioperl
+
+#IF PYTHON3 IS NOT INSTALLED, RUN THE FOLLOWING
+#brew install perl bioperl python3
 
 # Setting up RepeatModeler & RepeatMasker
-#sudo cpan JSON File::Which URI LWP::UserAgent Readonly Log::Log4perl Bio::SeqIO
+sudo cpan JSON File::Which URI LWP::UserAgent Readonly Log::Log4perl Bio::SeqIO
 
 cp $REPBOX_PREFIX/bin/rmodel_dependencies/* $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/
 sleep 2
@@ -79,8 +81,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     cd $REPBOX_PREFIX/bin/miteFinder
     make clean && make
 
-    #cd $REPBOX_PREFIX/bin/SINE_Scan-v1.1.1
-    #bash ./SINE_Scan_Directories.sh
+    cd $REPBOX_PREFIX/bin/SINE_Scan-v1.1.1
+    bash ./SINE_Scan_Directories.sh
 
 ### Linux check
 elif [[ "$OSTYPE" == "linux-gnu" ]]; then

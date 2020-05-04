@@ -13,13 +13,7 @@ class Repeatmasker < Formula
   depends_on "trf"
 
   def install
-    perl = if build.with? "perl"
-        system "which perl"
-#      Formula["perl"].opt_bin/"perl"
-    else
-      system "which perl"
-    end
-
+    perl = system "which perl"
     libexec.install Dir["*"]
     bin.install_symlink "../libexec/RepeatMasker"
 
@@ -39,6 +33,7 @@ class Repeatmasker < Formula
     # 8. Done
 
     (libexec/"config.txt").write <<~EOS
+
     system "which trf"
     2
     #{HOMEBREW_PREFIX}/opt/rmblast/bin

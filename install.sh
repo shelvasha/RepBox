@@ -9,10 +9,10 @@ if ! grep -q "HOMEBREW_PREFIX" ~/.bash_profile; then
     echo "export HOMEBREW_PREFIX='$(brew --prefix)'" >> ~/.bash_profile && source ~/.bash_profile
 fi
 
-if ! grep -q "PATH=$PATH$(find $REPBOX_PREFIX/bin -type d -exec echo ":{}" \; | tr -d '\n')" ~/.bash_profile; then
-    echo "PATH=$PATH$(find $REPBOX_PREFIX/bin -type d -exec echo ":{}" \; | tr -d '\n')" >> ~/.bash_profile && source ~/.bash_profile
+#if ! grep -q "PATH=$PATH$(find $REPBOX_PREFIX/bin -type d -exec echo ":{}" \; | tr -d '\n')" ~/.bash_profile; then
+#    echo "PATH=$PATH$(find $REPBOX_PREFIX/bin -type d -exec echo ":{}" \; | tr -d '\n')" >> ~/.bash_profile && source ~/.bash_profile
+#fi
 
-fi
 export REPBOX_PREFIX=$HOME/Repbox
 export HOMEBREW_PREFIX=$(brew --prefix)
 
@@ -43,41 +43,23 @@ rm $HOMEBREW_PREFIX/Homebrew/Library/Taps/brewsci/homebrew-science/Formula/repea
 cp $REPBOX_PREFIX/bin/brew/repeatmodeler.rb $HOMEBREW_PREFIX/Homebrew/Library/Taps/brewsci/homebrew-science/Formula/
 
 ### Installs Repbox dependencies via home/linuxbrew
-brew install trf emboss bowtie2 bedtools hmmer recon blast rmblast bioperl samtools repeatscout repeatmasker repeatmodeler muscle
+brew install trf emboss bowtie2 bedtools hmmer recon blast rmblast samtools repeatscout repeatmasker repeatmodeler muscle
+#perl, bioperl
 
 # Setting up RepeatModeler & RepeatMasker
-#cpan JSON File::Which URI LWP::UserAgent Readonly Log::Log4perl Bio::SeqIO
+cpan JSON File::Which URI LWP::UserAgent Readonly Log::Log4perl Bio::SeqIO
 
 cp $REPBOX_PREFIX/bin/rmodel_dependencies/* $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/
 sleep 2
 
-#grep -rl 'LTR' $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/config.txt |  xargs sed -i "" "s|LTR|$REPBOX_PREFIX/bin/LTR_retriever|g"
-#grep -rl 'NINJA' $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/config.txt |  xargs sed -i "" "s|NINJA|$REPBOX_PREFIX/bin/NINJA-0.95-cluster_only/NINJA/|g"
-
-cd $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/
-perl ./configure <config.txt &>/dev/null
-
-cd $HOMEBREW_PREFIX/Cellar/repeatmasker/*/libexec
-perl ./configure <config.txt &>/dev/null
-
-cd $REPBOX_PREFIX/bin/SINE_Scan-v1.1.1
-bash ./SINE_Scan_Directories.sh
-
-cd $REPBOX_PREFIX/bin/
-git clone https://github.com/genometools/genometools.git
-cd genometools
-make -j4 cairo=no
-make install -j4
-
 ### MacOS check
 if [[ "$OSTYPE" == "darwin"* ]]; then
-
     # Install Commandline Tools
     #rm -rf /Library/Developer/CommandLineTools
     #sudo xcode-select -s /Library/Developer/CommandLineTools
     #xcode-select --install
 
-    brew install llvm libomp gcc@9
+    brew install llvm libomp gcc@9 genometools
     if ! grep -q 'export PATH="/usr/local/opt/llvm/bin:$PATH"' ~/.bash_profile; then
         echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.bash_profile && source ~/.bash_profile
     fi
@@ -97,6 +79,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     cd $REPBOX_PREFIX/bin/miteFinder
     make clean && make
 
+    cd $REPBOX_PREFIX/bin/SINE_Scan-v1.1.1
+    bash ./SINE_Scan_Directories.sh
 
 ### Linux check
 elif [[ "$OSTYPE" == "linux-gnu" ]]; then
@@ -118,8 +102,24 @@ elif [[ "$OSTYPE" == "linux-gnu" ]]; then
     cd $REPBOX_PREFIX/bin/miteFinder
     make clean && make
 
+    cd $REPBOX_PREFIX/bin/
+    git clone https://github.com/genometools/genometools.git
+    cd genometools
+    make -j4 cairo=no
+    make install -j4
+
 else
     echo "Operating System is not supported"
 fi
+
+#grep -rl 'LTR' $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/config.txt |  xargs sed -i "" "s|LTR|$REPBOX_PREFIX/bin/LTR_retriever|g"
+#grep -rl 'NINJA' $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/config.txt |  xargs sed -i "" "s|NINJA|$REPBOX_PREFIX/bin/NINJA-0.95-cluster_only/NINJA/|g"
+
+cd $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/
+perl ./configure <config.txt &>/dev/null
+
+cd $HOMEBREW_PREFIX/Cellar/repeatmasker/*/libexec
+perl ./configure <config.txt &>/dev/null
+
 
 echo "Repbox setup is complete!"

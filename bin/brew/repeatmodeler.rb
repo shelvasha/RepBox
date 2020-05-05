@@ -65,9 +65,9 @@ open(prefix/'config.txt', 'w') do |f|
 #(prefix/"config.txt").write <<~EOS
 f.puts "
 #{perl}
-#{Formula["repeatmasker"].opt_prefix/"bin"}
+#{ENV["HOMEBREW_PREFIX"]}/Cellar/repeatmasker/4.1.0/libexec/
 #{Formula["recon"].opt_prefix/"bin"}
-#{ENV["HOMEBREW_PREFIX"]}/Cellar/repeatscout/1.0.6
+#{ENV["HOMEBREW_PREFIX"]}/Cellar/repeatscout/1.0.6/
 #{Formula["trf"].opt_prefix/"bin"/"trf"}
 1
 #{Formula["rmblast"].opt_prefix/"bin"}

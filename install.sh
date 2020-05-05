@@ -56,6 +56,7 @@ sleep 2
 
 ### MacOS check
 if [[ "$OSTYPE" == "darwin"* ]]; then
+
     # Install Commandline Tools
     #rm -rf /Library/Developer/CommandLineTools
     #sudo xcode-select -s /Library/Developer/CommandLineTools

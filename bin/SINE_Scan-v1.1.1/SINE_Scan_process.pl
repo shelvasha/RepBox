@@ -208,7 +208,7 @@ if(-d "$workdir"){
 		print "$workdir exists. Rerunning SINE_Scan from Step $continue.\n";
 	}else{
 		print "$workdir exists. clean it.\n";
-		system "rm -rf $workdir/*";
+		#system "rm -rf $workdir/*";
 	}
 }else{
         print "$workdir does not exists. build it.\n";
@@ -235,7 +235,7 @@ if(-f $genome){
 	if($continue != 2 and $continue != 3){
 		system "cp $genome $workdir/$G_name";
 	}
-}else{	
+}else{
 	print "Error. $genome doesn't exist or the format isn't FASTA.\n";
 	exit(1);
 }
@@ -252,7 +252,7 @@ my $S5Ffile=$line."-5smatches.fasta";
 my $logfile2=$line.".moduleTwo.logfile";
 my $logfile3=$line.".moduleThree.logfile";
 ####process user input SINE file which needs to be identified########
-if($infile ne ""){	
+if($infile ne ""){
 	if(-f $infile and -e $infile){
 		if($continue != 2 and $continue != 3){
 			system "cp $infile $sinefile";
@@ -284,7 +284,7 @@ close fout;
 
 ####Step One: ab initial identification of SINE candidates. Currently only SINE-Finder is used here. Other tools (RepeatModeler, RepeatScout etc.) will be added in future. User can run them separately and use -i parameter to perform verification  #######
 if($step=~/1/){
-	if($infile eq "" and $annotation eq ""){	
+	if($infile eq "" and $annotation eq ""){
 		print "Step One: Run SINE-Finder.\n";
 		my $pm=Parallel::ForkManager->new(5);
 		my @exec=('/Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/7SLandtRNA-sine_finder.py','/Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/5S-sine_finder.py -s 0');
@@ -295,7 +295,7 @@ if($step=~/1/){
 			system "python $process -T chunkwise -f fasta $genome";
 			$pm->finish;
 		}
-		$pm->wait_all_children;	
+		$pm->wait_all_children;
 		if(!-f $SFfile and !-f $S5Ffile){
 			print "Error. SINE-Finder output file $SFfile doesn't exist.\n";
 			exit(1);
@@ -319,8 +319,8 @@ my $one_stop=Benchmark->new;
 my $time_cost=timediff($one_stop,$one_start);
 print "Time cost for SINE-Finder Module One:",timestr($time_cost),"\n";
 
-		
-		
+
+
 ######################
 #Build genome database####
 my $second_start=Benchmark->new;
@@ -340,7 +340,7 @@ if($step =~/2/ or $step=~/3/){
 				}
 			}
 		}
-		close in;	
+		close in;
 	}else{
 		push @files,$genome;
 	}
@@ -352,7 +352,7 @@ if($step =~/2/ or $step=~/3/){
 			$flag=0;
 		}
 	}
-	
+
 	if($flag == 1){
 		print "Genomic database exists.\n";
 	}else{
@@ -383,7 +383,7 @@ if($boundary == 1 && $step=~/1/){
 		print "Your genomic dataset has no reasonable SINE candidates\n";
 		exit (0);
 	}else{
-		system "rm -rf $workdir/RG";
+		#system "rm -rf $workdir/RG";
 	}
 #	system "mv $RGdir RG_total/";
 }
@@ -469,12 +469,12 @@ sub help{
 print STDERR <<EOF;
 
 SYNOPSIS: SINE_Scan_process.pl <options>
- 
+
 Options:
-        -g	string	        Genomic file, the file's suffix must be 'fasta', 'fa' or 'fas'. [Required] 
+        -g	string	        Genomic file, the file's suffix must be 'fasta', 'fa' or 'fas'. [Required]
 	-d	string          Directory which the pipeline uses. Intermidiate and final results files will be put in this directory. [Required]
 	-o	string          Genome ID used in final output. An example(the authors' advice):genus_species_strain(or version). [Required]
-	-z	string		The directory where final results are written. [Default: ./] 
+	-z	string		The directory where final results are written. [Default: ./]
 	-k	integer		The number of cpu numbers. [Default: 2]
 	-s	integer         Mode of running SINE_Scan. This pipeline has three modules, you can run them all or seperately. To run the entire pipeline, type 123. To run the first two modules, type 12. [default: 123]
 	-i	string	        FASTA format file containing SINE candidates for verification. This file is needed if you skip Module One to run Module Two. [Default: NULL]
@@ -491,14 +491,14 @@ Options:
 	-S	float		Maximum SAQ of flanking regions. [default: 0.6]
 	-I	float		Minimum SAQ of TE ends. [default: 0.75]
 	-C	float           Minimum identity in one column to define a conserved site. [Default: 0.8]
-	-l	integer		Maximum distance between two conserved sites. [Default: 4]	
+	-l	integer		Maximum distance between two conserved sites. [Default: 4]
 	-L	integer		Minimum length of a highly conserved block. [Default: 10]
 	-f	float		Minimum percent of conserved sites in highly conserved block. [Default: 0.6]
-	-w	integer		Continue to run the pipeline from the point it stops. The value of -w only could be assigned 2 or 3, which means the pipeline begins from Module Two or Three. Use this parameter only based on an aborted previous run. If this paramter is used, no other parameter is needed. 
+	-w	integer		Continue to run the pipeline from the point it stops. The value of -w only could be assigned 2 or 3, which means the pipeline begins from Module Two or Three. Use this parameter only based on an aborted previous run. If this paramter is used, no other parameter is needed.
 	-h	string          Show this help
 
 An example : perl SINE_Scan_process.pl -g genome_file(fasta) -d workdir -s 123 -o species_name;
 
 EOF
-	exit 0; 
+	exit 0;
 }

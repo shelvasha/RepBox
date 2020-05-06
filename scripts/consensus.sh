@@ -8,13 +8,13 @@ cd consensus_out
 GENOME=$(ls $REPBOX_PREFIX/genome/*.{fas,fna,fa,fasta} 2>/dev/null)
 INDEXNAME=$(basename $GENOME | cut -f 1 -d '.')
 
-#HELSCAN=$(ls $REPBOX_PREFIX/helitronscanner_out/helitronscanner_out*) -- Commented out due to HelitronScanner errors.
 # If successfully implemented, add $HELSCAN to FASTAARRAY below.
+#HELSCAN=$(ls $REPBOX_PREFIX/helitronscanner_out/helitronscanner_out*) -- Commented out due to HelitronScanner errors.
+#GRF=$REPBOX_PREFIX/grf_out/mite.fasta 2>/dev/null
 
-GRF=$REPBOX_PREFIX/grf_out/mite.fasta 2>/dev/null
 SINSCN=$(ls $REPBOX_PREFIX/sinescan_out/$INDEXNAME-sinescan.fasta) 2>/dev/null
 MITEF=$(ls $REPBOX_PREFIX/mitefinder_out/$INDEXNAME.mite_finder.out) 2>/dev/null
-FASTAARRAY=("$GRF" "$SINSCN" "$MITEF")
+FASTAARRAY=("$SINSCN" "$MITEF")
 
 # Make an index with the reference genome
 bowtie2-build -f $GENOME $INDEXNAME
@@ -48,7 +48,7 @@ REPGFF=$(ls $REPBOX_PREFIX/repeatmasker_out/*fa.out.gff) 2>/dev/null
 
 ## Generation of consensus annotation
 echo "Generating consensus GTF..."
-$REPBOX_PREFIX/bin/gffcompare/gffcompare $EAHELGFF $GRFGFF $MITEGFF $SINEGFF $MITEFGFF $REPGFF  2>/dev/null
+$REPBOX_PREFIX/bin/gffcompare/gffcompare $EAHELGFF $MITEGFF $SINEGFF $MITEFGFF $REPGFF  2>/dev/null
 
 ## Generation of consensus FASTA
 CONSGFF=$REPBOX_PREFIX/consensus_out/gffcmp.combined.gtf

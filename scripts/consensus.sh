@@ -8,9 +8,9 @@ cd consensus_out
 GENOME=$(ls $REPBOX_PREFIX/genome/*.{fas,fna,fa,fasta} 2>/dev/null)
 INDEXNAME=$(basename $GENOME | cut -f 1 -d '.')
 
-# If successfully implemented, add $HELSCAN to FASTAARRAY below.
-#HELSCAN=$(ls $REPBOX_PREFIX/helitronscanner_out/helitronscanner_out*) -- Commented out due to HelitronScanner errors.
-#GRF=$REPBOX_PREFIX/grf_out/mite.fasta 2>/dev/null
+### Commented out due to HelitronScanner errors. If successfully implemented, add $HELSCAN to FASTAARRAY below.
+# HELSCAN=$(ls $REPBOX_PREFIX/helitronscanner_out/helitronscanner_out*)
+# GRF=$REPBOX_PREFIX/grf_out/mite.fasta 2>/dev/null
 
 SINSCN=$(ls $REPBOX_PREFIX/sinescan_out/$INDEXNAME-sinescan.fasta) 2>/dev/null
 MITEF=$(ls $REPBOX_PREFIX/mitefinder_out/$INDEXNAME.mite_finder.out) 2>/dev/null
@@ -32,9 +32,10 @@ do
 
    # BAM to BED
    bedtools bamtobed -i $OUT.bam > $OUT.bed 2>/dev/null
+   awk '! a[$1" "$2]++' $OUT.bed > $OUT.rmdup.bed
 
    # BED to GFF3
-   $REPBOX_PREFIX/bin/gffread/gffread $OUT.bed > $OUT.gff3 2>/dev/null
+   $REPBOX_PREFIX/bin/gffread/gffread $OUT.rmdup.bed > $OUT.gff3 2>/dev/null
 done
 
 ###HELSCANGFF=$(ls $REPBOX_PREFIX/helitronscanner_out/*.gff3.)

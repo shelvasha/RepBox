@@ -46,7 +46,7 @@ INDEXNAME=$(basename $GENOME | cut -f 1 -d '.')
 mkdir results_$INDEXNAME
 sleep 2
 
-mv $REPBOX_PREFIX/consensus_out/Summary*.txt results_$INDEXNAME
+mv $REPBOX_PREFIX/consensus_out/RMLAST/Summary*.txt results_$INDEXNAME
 sleep 2
 
 for folder in $(ls -d *_out)

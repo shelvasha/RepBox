@@ -16,7 +16,7 @@ cd $REPBOX_PREFIX/consensus_out
 FASTA="consensus_out.fa"
 DIRECTORY=$(pwd)
 
-perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi
+perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi -pa $THREAD
 
 ## RepeatClassifier with override
 # perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -rmblast_dir $HOMEBREW_PREFIX/opt/rmblast/bin -repeatmasker_dir $HOMEBREW_PREFIX/opt/repeatmasker/libexec -consensi $FASTA -engine ncbi &
@@ -52,7 +52,7 @@ NAME2=$(basename $GENOME)
 sleep 3
 
 ## RepeatMasker command and parameters
-cd $OUT
+cd $OUTPUT
 RepeatMasker -e rmblast -pa $THREAD -lib $LIBRARY -gff -dir $OUTPUT -u $GENOME #&&
 sleep 3
 

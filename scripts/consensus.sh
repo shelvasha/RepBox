@@ -36,7 +36,7 @@ do
    awk '! a[$1" "$2]++' $OUT.bed > $OUT.rmdup.bed
 
    # BED to GFF3
-   # $REPBOX_PREFIX/bin/gffread/gffread $OUT.rmdup.bed > $OUT.gff3
+   $REPBOX_PREFIX/bin/gffread/gffread $OUT.rmdup.bed > $OUT.gff3
 
    # rm *.bed
    # rm *.bam

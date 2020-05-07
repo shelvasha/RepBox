@@ -36,11 +36,11 @@ do
    awk '! a[$1" "$2]++' $OUT.bed > $OUT.rmdup.bed
 
    # BED to GFF3
-   $REPBOX_PREFIX/bin/gffread/gffread $OUT.rmdup.bed > $OUT.gff3
+   # $REPBOX_PREFIX/bin/gffread/gffread $OUT.rmdup.bed > $OUT.gff3
 
-#   rm *.bed
-#   rm *.bam
-#   rm *.sam
+   # rm *.bed
+   # rm *.bam
+   # rm *.sam
 
 done
 
@@ -55,7 +55,7 @@ MITEGFF=$(ls $REPBOX_PREFIX/mitetracker_out/*/all.gff3) 2>/dev/null
 
 ## Generation of consensus annotation
 echo "Generating consensus GTF..."
-$REPBOX_PREFIX/bin/gffcompare/gffcompare $EAHELGFF $MITEGFF $SINEGFF $MITEFGFF  2>/dev/null
+$REPBOX_PREFIX/bin/gffcompare/gffcompare $EAHELGFF $MITEGFF $SINEGFF $MITEFGFF -D -T  2>/dev/null
 
 ## Generation of consensus FASTA
 CONSGFF=$REPBOX_PREFIX/consensus_out/gffcmp.combined.gtf

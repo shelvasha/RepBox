@@ -10,7 +10,7 @@ DNA                    19           5852         0.00%
     Crypton-V          12           2043         0.00%
     Dada               9            1719         0.00%
     IS3EU              18           1934         0.00%
-    MULE-MuDR	       1500	        1007085	     0.84%
+    MULE-MuDR	       1500	    1007085	 0.84%
     Merlin             3            384          0.00%
     PIF-Harbinger      485          151486       0.13%
     PiggyBac           2            728          0.00%

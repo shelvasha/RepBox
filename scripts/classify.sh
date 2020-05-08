@@ -52,9 +52,6 @@ LIBRARY=$(ls $REPBOX_PREFIX/consensus_out/final.nr.consensus_edit.fa)
 NAME2=$(basename $GENOME)
 sleep 3
 
-## RepeatModeler commands and parameters
-cd $OUTPUT
-
 ## RepeatMasker command and parameters
 RepeatMasker -e rmblast -pa $THREAD -lib $LIBRARY -gff -dir $OUTPUT -u $GENOME #&&
 sleep 3

@@ -36,7 +36,16 @@ do
    awk '! a[$1" "$2]++' $OUT.bed > $OUT.rmdup.bed
 
    # BED to GFF3
+<<<<<<< HEAD
    $REPBOX_PREFIX/bin/gffread/gffread $OUT.rmdup.bed > $OUT.gff3 2>/dev/null
+=======
+   $REPBOX_PREFIX/bin/gffread/gffread $OUT.rmdup.bed > $OUT.gff3
+
+   # rm *.bed
+   # rm *.bam
+   # rm *.sam
+
+>>>>>>> master
 done
 
 ###HELSCANGFF=$(ls $REPBOX_PREFIX/helitronscanner_out/*.gff3.)

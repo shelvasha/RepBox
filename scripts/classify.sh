@@ -38,8 +38,8 @@ cat $LIBRARY1 $LIBRARY2 > merged-library.fa #&
 cd $DIRECTORY
 vsearch -sortbylength merged-library.fa --output merged-library.sorted.fa --log vsearch.log
 
-## Sequences are clustered into a single fasta based on >=70% sequence similarity using VSEARCH
-vsearch -cluster_fast merged-library.sorted.fa --id 0.70 --centroids my_centroids.fa --uc result.uc -consout final.nr.consensus.fa -msaout aligned.fasta --log vsearch2.log
+## Sequences are clustered into a single fasta based on >=80% sequence similarity using VSEARCH
+vsearch -cluster_fast merged-library.sorted.fa --id 0.80 --centroids my_centroids.fa --uc result.uc -consout final.nr.consensus.fa -msaout aligned.fasta --log vsearch2.log
 
 sed 's/centroid=*//' final.nr.consensus.fa | sed  's/;seqs=[0-9]*$//' > final.nr.consensus_edit.fa
 

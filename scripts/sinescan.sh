@@ -26,7 +26,10 @@ DIRECTORY=$(pwd)
 
 # An example : perl SINE_Scan_process.pl -g genome_file(fasta) -d workdir -s 123 -o species_name;
 cd $REPBOX_PREFIX/bin/SINE_Scan-v1*/
+THREAD=8
 perl SINE_Scan_process.pl -g $GENOME -d $DIRECTORY -o $INDEXNAME -s 123 -k $THREAD
 
 cd $REPBOX_PREFIX/sinescan_out
-mv *.sine.fa $INDEXNAME-sinescan.fasta
+
+FASTA=$REPBOX_PREFIX/sinescan_out/*.sine.fa
+perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi -pa $THREAD

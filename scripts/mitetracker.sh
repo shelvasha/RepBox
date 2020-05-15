@@ -21,10 +21,6 @@ rm -rf mitetracker_out
 mkdir mitetracker_out
 cd mitetracker_out
 
-#virtualenv -p python3 venv
-#source venv/bin/activate
-#pip3 install -r $REPBOX_PREFIX/bin/MITE-Tracker/requirements.txt
-
 cd $REPBOX_PREFIX/bin/MITE-Tracker/
 rm -rf results
 mkdir results
@@ -36,3 +32,7 @@ cd $REPBOX_PREFIX/bin/MITE-Tracker/
 ## Running MITE-Tracker within python3 virtual environment
 python3 -m MITETracker -g $GENOME -w $THREAD -j $INDEXNAME
 mv ~/Repbox*/bin/MITE-Tracker/results/$INDEXNAME $REPBOX_PREFIX/mitetracker_out
+
+cd $REPBOX_PREFIX/mitetracker_out/$INDEXNAME
+FASTA="$REPBOX_PREFIX/mitetracker_out/$INDEXNAME/all.fasta"
+perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi -pa $THREAD

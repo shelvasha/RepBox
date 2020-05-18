@@ -21,5 +21,7 @@ cd mitefinder_out
 
 miteFinder="$REPBOX_PREFIX/bin/miteFinder/miteFinder"
 $miteFinder -input $GENOME -output $INDEXNAME.mite_finder.out -pattern_scoring $REPBOX_PREFIX/bin/miteFinder/profile/pattern_scoring.txt -threshold 0.5
-FASTA=$REPBOX_PREFIX/mitefinder_out/$INDEXNAME.mite_finder.out
+
+python3 $REPBOX_PREFIX/util/MFheader.py $REPBOX_PREFIX/mitefinder_out/*.mite_finder.out
+FASTA=$REPBOX_PREFIX/mitefinder_out/*.mite_finder.out.clean
 perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi -pa $THREAD

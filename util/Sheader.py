@@ -12,7 +12,7 @@ count=1
 for record in SeqIO.parse(args.mfilename, "fasta"):
     name=record.id
     sequence=record.seq
-    print(">" + name + "SINEFINDER_" + count, file=sample)
+    print(">" + name + "_SINEFINDER_" + str(count), file=sample)
     print(sequence, file=sample)
     count=count+1
 sample.close()

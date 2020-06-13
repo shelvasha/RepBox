@@ -10,9 +10,9 @@ sample = open(args.mfilename + '.clean', 'w')
 count=1
 
 for record in SeqIO.parse(args.mfilename, "fasta"):
-    name=count
+    name=record.id
     sequence=record.seq
-    print(">" + name + "MITETRACKER_" + count, file=sample)
+    print(">" + name + "_MITETRACKER_" + str(count), file=sample)
     print(sequence, file=sample)
     count=count+1
 sample.close()

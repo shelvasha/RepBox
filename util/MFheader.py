@@ -7,13 +7,12 @@ parser = argparse.ArgumentParser(description='mitefinderheaderclean -i MITEFinde
 parser.add_argument('mfilename', metavar='<filename>.mitefinder.out', type=str)
 args = parser.parse_args()
 sample = open(args.mfilename + '.clean', 'w')
+count=1
 
 for record in SeqIO.parse(args.mfilename, "fasta"):
-    chr=record.id.split("|")[1]
-    tsdlength=record.id.split("|")[6]
-    mismatchsite=record.id.split("|")[7]
+    name=count
     sequence=record.seq
-
-    print(">MITE_" + "Chr" + chr + "_" + tsdlength + "_" + mismatchsite, file=sample)
+    print(">MITEFINDER_" + name, file=sample)
     print(sequence, file=sample)
+    count=count+1
 sample.close()

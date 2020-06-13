@@ -73,12 +73,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     cd $REPBOX_PREFIX/bin/cd-hit-v4.6.1/
     make clean && make
 
-    cd $REPBOX_PREFIX/bin/gffcompare/
-    make clean && make
-
-    cd $REPBOX_PREFIX/bin/gffread/
-    make clean && make
-
     cd $REPBOX_PREFIX/bin/miteFinder
     make clean && make
 
@@ -94,12 +88,6 @@ elif [[ "$OSTYPE" == "linux-gnu" ]]; then
     #make clean && make
 
     cd $REPBOX_PREFIX/bin/cd-hit-v4.6.1/
-    make clean && make
-
-    cd $REPBOX_PREFIX/bin/gffcompare/
-    make clean && make
-
-    cd $REPBOX_PREFIX/bin/gffread/
     make clean && make
 
     cd $REPBOX_PREFIX/bin/miteFinder

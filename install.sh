@@ -43,13 +43,13 @@ rm $HOMEBREW_PREFIX/Homebrew/Library/Taps/brewsci/homebrew-science/Formula/repea
 cp $REPBOX_PREFIX/bin/brew/repeatmodeler.rb $HOMEBREW_PREFIX/Homebrew/Library/Taps/brewsci/homebrew-science/Formula/
 
 ### Installs Repbox dependencies via home/linuxbrew
-brew install trf emboss bowtie2 bedtools hmmer recon blast rmblast samtools repeatscout repeatmasker repeatmodeler muscle
+brew install cpanm trf emboss bowtie2 bedtools hmmer recon blast rmblast samtools repeatscout repeatmasker repeatmodeler muscle
 
 #IF PYTHON3 IS NOT INSTALLED, RUN THE FOLLOWING
 #brew install perl bioperl python3
 
 # Setting up RepeatModeler & RepeatMasker
-sudo cpan JSON File::Which URI LWP::UserAgent Readonly Log::Log4perl Bio::SeqIO
+cpanm JSON File::Which URI LWP::UserAgent Readonly Log::Log4perl Bio::SeqIO
 
 cp $REPBOX_PREFIX/bin/rmodel_dependencies/* $HOMEBREW_PREFIX/Cellar/repeatmodeler/*/
 sleep 2
@@ -112,5 +112,5 @@ perl ./configure <config.txt # &>/dev/null
 cd $HOMEBREW_PREFIX/Cellar/repeatmasker/*/libexec
 perl ./configure <config.txt # &>/dev/null
 
-
+cp $REPBOX_PREFIX/bin/blast/* $HOMEBREW_PREFIX/Cellar/repeatmasker/*/libexec/Libraries/
 echo "Repbox setup is complete!"

@@ -17,7 +17,7 @@ cd $REPBOX_PREFIX/consensus_out
 DIRECTORY=$(pwd)
 
 ### Repeat classification using RepeatClassifier for all de novo identified elements
-LIBRARY1=$REPBOX_PREFIX/repeatmodeler_out/RM*/consensi.fa.clean.classified
+LIBRARY1=$REPBOX_PREFIX/repeatmodeler_out/RM*/consensi.fa.classified
 LIBRARY2=$REPBOX_PREFIX/sinescan_out/*.sine.fa.clean.classified
 LIBRARY3=$REPBOX_PREFIX/mitefinder_out/*.mite_finder.out.clean.classified
 LIBRARY4=$REPBOX_PREFIX/helitronscanner_out/*.hel.fa.clean.classified

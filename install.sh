@@ -84,9 +84,6 @@ elif [[ "$OSTYPE" == "linux-gnu" ]]; then
 
     brew install gcc
 
-    #cd $REPBOX_PREFIX/bin/GenericRepeatFinder/src
-    #make clean && make
-
     cd $REPBOX_PREFIX/bin/cd-hit-v4.6.1/
     make clean && make
 
@@ -112,5 +109,6 @@ perl ./configure <config.txt # &>/dev/null
 cd $HOMEBREW_PREFIX/Cellar/repeatmasker/*/libexec
 perl ./configure <config.txt # &>/dev/null
 
-
+tar -xvf $REPBOX_PREFIX/bin/blast/taxdb.tar.gz
+cp $REPBOX_PREFIX/bin/blast/* $HOMEBREW_PREFIX/Cellar/repeatmasker/*/libexec/Libraries/
 echo "Repbox setup is complete!"

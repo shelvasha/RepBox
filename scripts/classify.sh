@@ -20,10 +20,11 @@ DIRECTORY=$(pwd)
 LIBRARY1=$REPBOX_PREFIX/repeatmodeler_out/RM*/consensi.fa.clean.classified
 LIBRARY2=$REPBOX_PREFIX/sinescan_out/*.sine.fa.clean.classified
 LIBRARY3=$REPBOX_PREFIX/mitefinder_out/*.mite_finder.out.clean.classified
-LIBRARY4=$REPBOX_PREFIX/mitetracker_out/*/all.fasta.clean.classified
-LIBRARY5=$REPBOX_PREFIX/eahelitron_out/EAHeli_out.fa.clean.classified
+LIBRARY4=$REPBOX_PREFIX/helitronscanner_out/*.hel.fa.clean.classified
+#LIBRARY5=$REPBOX_PREFIX/mitetracker_out/*/all.fasta.clean.classified
+#LIBRARY6=$REPBOX_PREFIX/eahelitron_out/EAHeli_out.fa.clean.classified
 
-cat $LIBRARY1 $LIBRARY2 $LIBRARY3 $LIBRARY4 $LIBRARY5 > merged-library.fa #&
+cat $LIBRARY1 $LIBRARY2 $LIBRARY3 $LIBRARY4 > merged-library.fa #&
 
 PROT=$REPBOX_PREFIX/sequence.fasta
 THREAD=8

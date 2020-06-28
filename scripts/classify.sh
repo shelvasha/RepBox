@@ -11,8 +11,8 @@ if [[ $THREAD -lt 8 ]]; then
     THREAD=4
 fi
 
-#rm -rf consensus_out
-#mkdir consensus_out
+rm -rf consensus_out
+mkdir consensus_out
 cd $REPBOX_PREFIX/consensus_out
 DIRECTORY=$(pwd)
 
@@ -50,8 +50,8 @@ blastn -task megablast -query $FASTA -db transcripts.no_tes.fa -outfmt '6 qseqid
 sleep 2
 perl $REPBOX_PREFIX/util/fastaqual_select.pl -f $FASTA -e <(awk '{print $1}' repeatmodeller_lib.vs.transcripts.no_tes.25cul2.1e25.megablast.out | sort | uniq) > $FASTA.fa.classified.filtered_for_CDS_repeats.fa
 sleep 2
-## Final run with RepeatMasker
 
+## Final run with RepeatMasker
 rm -rf RMLAST
 mkdir RMLAST
 

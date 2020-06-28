@@ -9,11 +9,12 @@ pid1=$(pgrep repeatmodel.sh)
 while [ -d /proc/$pid1 ] ; do
     sleep 2
 done
-$REPBOX_PREFIX/scripts/repeatmask.sh
-pid2=$(pgrep repeatmask.sh)
-while [ -d /proc/$pid2 ] ; do
-    sleep 2
-done
+
+#$REPBOX_PREFIX/scripts/repeatmask.sh
+#pid2=$(pgrep repeatmask.sh)
+#while [ -d /proc/$pid2 ] ; do
+#    sleep 2
+#done
 
 #$REPBOX_PREFIX/scripts/eahelitron.sh &&
 #$REPBOX_PREFIX/scripts/mitetracker.sh &&

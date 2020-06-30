@@ -65,6 +65,8 @@ for folder in $(ls -d *_out)
 do
     mv $folder $REPBOX_PREFIX/results_$INDEXNAME;
 done
-
+sleep 2
+mv genome/ $REPBOX_PREFIX/results_$INDEXNAME;
+mkdir genome
 sleep 2
 echo "Repbox Complete."

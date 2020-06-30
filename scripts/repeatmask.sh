@@ -24,9 +24,9 @@ fi
 
 ### Directory creation and assignment of variables
 cd $REPBOX_PREFIX
+DIRECTORY=$REPBOX_PREFIX/repeatmodeler_out/RM*
 LIBRARY=$(ls $DIRECTORY/*.classified)
 GENOME=$(ls $HOME/Repbox/genome/*.{fas,fna,fa,fasta} 2>/dev/null)
-DIRECTORY=$REPBOX_PREFIX/repeatmodeler_out/RM*
 
 rm -rf repeatmasker_out
 mkdir repeatmasker_out

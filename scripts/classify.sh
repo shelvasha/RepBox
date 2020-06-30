@@ -9,6 +9,7 @@
 #==============================================================================
 
 echo "Clustering and classifying repeats ..."
+cd $REPBOX_PREFIX
 
 ### Computing resource setup
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -23,7 +24,7 @@ if [[ $THREAD -lt 8 ]]; then
 fi
 
 ### Directory creation and assignment of variables.
-rm -rf consensus_out
+rm -rf consensus_out 2>/dev/null
 mkdir consensus_out
 cd $REPBOX_PREFIX/consensus_out
 DIRECTORY=$(pwd)

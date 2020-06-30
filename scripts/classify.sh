@@ -37,8 +37,7 @@ LIBRARY4=$REPBOX_PREFIX/helitronscanner_out/*.hel.fa.clean.classified
 cat $LIBRARY1 $LIBRARY2 $LIBRARY3 $LIBRARY4 > merged-library.fa #&
 
 ### Clustering - Classified repeats are merged into single
-## consensus fasta based on >=80%similarity of sequences
-cd $DIRECTORY
+## Consensus fasta based on >=80% similarity of sequences
 vsearch -sortbylength merged-library.fa --output merged-library.sorted.fa --log vsearch.log
 vsearch -cluster_fast merged-library.sorted.fa --id 0.80 --centroids my_centroids.fa --uc result.uc -consout final.nr.consensus.fa -msaout aligned.fasta --log vsearch2.log
 sed 's/centroid=*//' final.nr.consensus.fa | sed  's/;seqs=[0-9]*$//' > final.nr.consensus_edit.fa
@@ -48,18 +47,19 @@ FASTA=$REPBOX_PREFIX/consensus_out/final.nr.consensus_edit.fa
 perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi -pa $THREAD
 
 ### BLASTN - Removal of protein coding sequences that are not TEs by BLASTing library of known TE proteins ($PROT) to classified consensus TE fasta (final.nr.consensus_edit.fa.classified)
+## This step is recommended if you have an annotated genome
 PROT=$REPBOX_PREFIX/sequence.fasta
 FASTA=$REPBOX_PREFIX/consensus_out/final.nr.consensus_edit.fa.classified
-export BLASTDB=$BLASTDB:$HOMEBREW_PREFIX/Cellar/repeatmasker/4.1.0/libexec/Libraries/
-blastp -query $PROT -db $HOMEBREW_PREFIX/Cellar/repeatmasker/4.1.0/libexec/Libraries/RepeatPeps.lib -outfmt '6 qseqid staxids bitscore std sscinames sskingdoms stitle' -max_target_seqs 25 -culling_limit 2 -num_threads $THREAD -evalue 1e-5 -out proteins.fa.vs.RepeatPeps.25cul2.1e5.blastp.out
+export BLASTDB=$BLASTDB:$HOMEBREW_PREFIX/Cellar/repeatmasker/*/libexec/Libraries/
+blastp -query $PROT -db $HOMEBREW_PREFIX/Cellar/repeatmasker/*/libexec/Libraries/RepeatPeps.lib -outfmt '6 qseqid staxids bitscore std sscinames sskingdoms stitle' -max_target_seqs 25 -culling_limit 2 -num_threads $THREAD -evalue 1e-5 -out proteins.fa.vs.RepeatPeps.25cul2.1e5.blastp.out
 sleep 2
 perl $REPBOX_PREFIX/util/fastaqual_select.pl -f $FASTA -e <(awk '{print $1}' proteins.fa.vs.RepeatPeps.25cul2.1e5.blastp.out | sort | uniq) > transcripts.no_tes.fa
 sleep 2
 makeblastdb -in transcripts.no_tes.fa -dbtype nucl
 sleep 2
-blastn -task megablast -query $FASTA -db transcripts.no_tes.fa -outfmt '6 qseqid staxids bitscore std sscinames sskingdoms stitle' -max_target_seqs 25 -culling_limit 2 -num_threads 48 -evalue 1e-10 -out repeatmodeller_lib.vs.transcripts.no_tes.25cul2.1e10.megablast.out
+blastn -task megablast -query $FASTA -db transcripts.no_tes.fa -outfmt '6 qseqid staxids bitscore std sscinames sskingdoms stitle' -max_target_seqs 25 -culling_limit 2 -num_threads 48 -evalue 1e-10 -out repeatmodeler_lib.vs.transcripts.no_tes.25cul2.1e10.megablast.out
 sleep 2
-perl $REPBOX_PREFIX/util/fastaqual_select.pl -f $FASTA -e <(awk '{print $1}' repeatmodeller_lib.vs.transcripts.no_tes.25cul2.1e25.megablast.out | sort | uniq) > $FASTA.fa.classified.filtered_for_CDS_repeats.fa
+perl $REPBOX_PREFIX/util/fastaqual_select.pl -f $FASTA -e <(awk '{print $1}' repeatmodeler_lib.vs.transcripts.no_tes.25cul2.1e10.megablast.out | sort | uniq) > $FASTA.fa.classified.filtered_for_CDS_repeats.fa
 sleep 2
 
 ## Runs RepeatMasker
@@ -69,11 +69,11 @@ mkdir RMLAST
 GENOME=$(ls $REPBOX_PREFIX/genome/*.{fas,fna,fa,fasta} 2>/dev/null)
 OUTPUT=RMLAST/
 LIBRARY=$(ls $REPBOX_PREFIX/consensus_out/*.fa.classified.filtered_for_CDS_repeats.fa)
-NAME2=$(basename $GENOME)
+##NAME2=$(basename $GENOME)
 sleep 3
 
 ## RepeatMasker command and parameters
-RepeatMasker -e rmblast -pa $THREAD -lib $LIBRARY -gff -dir $OUTPUT -u $GENOME
+RepeatMasker -qq -e rmblast -pa $THREAD -lib $LIBRARY -gff -dir $OUTPUT -u $GENOME
 sleep 3
 
 ## Creates summary file of .out

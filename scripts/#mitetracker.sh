@@ -35,5 +35,6 @@ mv ~/Repbox*/bin/MITE-Tracker/results/$INDEXNAME $REPBOX_PREFIX/mitetracker_out
 
 cd $REPBOX_PREFIX/mitetracker_out/$INDEXNAME
 python3 $REPBOX_PREFIX/util/MTheader.py $REPBOX_PREFIX/mitetracker_out/$INDEXNAME/all.fasta
-FASTA="$REPBOX_PREFIX/mitetracker_out/$INDEXNAME/all.fasta.clean"
-perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi -pa $THREAD
+
+#FASTA="$REPBOX_PREFIX/mitetracker_out/$INDEXNAME/all.fasta.clean"
+#perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi -pa $THREAD

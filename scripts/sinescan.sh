@@ -40,5 +40,6 @@ cd $REPBOX_PREFIX/sinescan_out
 
 ### Fasta output cleanup and classification
 python3 $REPBOX_PREFIX/util/Sheader.py $REPBOX_PREFIX/sinescan_out/*.sine.fa
-FASTA=$REPBOX_PREFIX/sinescan_out/*.sine.fa.clean
-perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi -pa $THREAD
+
+#FASTA=$REPBOX_PREFIX/sinescan_out/*.sine.fa.clean
+#perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi -pa $THREAD

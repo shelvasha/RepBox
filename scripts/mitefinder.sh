@@ -33,9 +33,12 @@ cd mitefinder_out
 
 ### Runs MITEFinder using program defaults
 miteFinder="$REPBOX_PREFIX/bin/miteFinder/miteFinder"
-$miteFinder -input $GENOME -output $INDEXNAME.mite_finder.out -pattern_scoring $REPBOX_PREFIX/bin/miteFinder/profile/pattern_scoring.txt -threshold 0.5
+$miteFinder -input $GENOME -output $INDEXNAME.mite_finder.out -pattern_scoring $REPBOX_PREFIX/bin/miteFinder/profile/pattern_scoring.txt -threshold 0.2
 
 ### Fasta output cleanup and classification
 python3 $REPBOX_PREFIX/util/MFheader.py $REPBOX_PREFIX/mitefinder_out/*.mite_finder.out
-FASTA=$REPBOX_PREFIX/mitefinder_out/*.mite_finder.out.clean
-perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi -pa $THREAD
+blastn -task blastn -query $REPBOX_PREFIX/mitefinder_out/*.mite_finder.out  -subject $GENOME -outfmt "6 qseqid sseqid qstart qend sstart send score length mismatch gaps gapopen nident pident evalue qlen slen qcovs" > $REPBOX_PREFIX/mitefinder_out/*.mite_finder.csv
+python3 $REPBOX_PREFIX/util/blast2gff.py -i $REPBOX_PREFIX/mitefinder_out/*.mite_finder.csv -n MITEFinder -f MITE -o $REPBOX_PREFIX/mitefinder_out/$INDEXNAME.mite_finder.gff3
+
+#FASTA=$REPBOX_PREFIX/mitefinder_out/*.mite_finder.out.clean
+#perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi -pa $THREAD

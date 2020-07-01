@@ -23,7 +23,7 @@ DIRECTORY=$(pwd)
 EAHelitron=$HOME"/Repbox/bin/EAHelitron/EAHelitron"
 perl $EAHelitron $GENOME
 bedtools getfasta -fi $GENOME -bed EAHeli*.bed -name > EAHeli_out.fa
-
 python3 $REPBOX_PREFIX/util/EAheader.py $REPBOX_PREFIX/eahelitron_out/EAHeli_out.fa
-FASTA=$REPBOX_PREFIX/eahelitron_out/EAHeli_out.fa.clean
-perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi -pa $THREAD
+
+#FASTA=$REPBOX_PREFIX/eahelitron_out/EAHeli_out.fa.clean
+#perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi -pa $THREAD

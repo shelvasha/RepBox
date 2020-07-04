@@ -77,7 +77,7 @@ LIBRARY=$(ls $FASTA)
 sleep 3
 
 ## RepeatMasker command and parameters
-RepeatMasker -e ncbi -pa $THREAD -lib $LIBRARY -gff -dir $OUTPUT -u $GENOME
+RepeatMasker -qq -nolow -no_is -norna -e ncbi -pa $THREAD -lib $LIBRARY -gff -dir $OUTPUT -u $GENOME >repeatmask.log 2>repeatmask.log.2
 sleep 3
 
 ## Creates summary file of .out

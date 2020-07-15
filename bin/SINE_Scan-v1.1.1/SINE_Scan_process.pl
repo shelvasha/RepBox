@@ -287,7 +287,7 @@ if($step=~/1/){
 	if($infile eq "" and $annotation eq ""){
 		print "Step One: Run SINE-Finder.\n";
 		my $pm=Parallel::ForkManager->new(5);
-		my @exec=('/Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/7SLandtRNA-sine_finder.py','/Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/5S-sine_finder.py -s 0');
+		my @exec=('./PL_pipeline/7SLandtRNA-sine_finder.py','./PL_pipeline/5S-sine_finder.py -s 0');
 		my $m=0;
 		Finder_Loop:
 		foreach my $process (@exec){
@@ -301,10 +301,10 @@ if($step=~/1/){
 			exit(1);
 		}
 		if(-e $SFfile){
-			system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/getSINE-noTSD.pl $SFfile >$sinefile";
+			system "perl ./PL_pipeline/getSINE-noTSD.pl $SFfile >$sinefile";
 		}
 		if(-e $S5Ffile){
-			system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/getSINE-noTSD.pl $S5Ffile >>$sinefile";
+			system "perl ./PL_pipeline/getSINE-noTSD.pl $S5Ffile >>$sinefile";
 		}
 		print "Finish Step One.\n";
 	}elsif($infile ne "" and $annotation ne ""){
@@ -357,7 +357,7 @@ if($step =~/2/ or $step=~/3/){
 		print "Genomic database exists.\n";
 	}else{
 		print "Build BlAST database for the genomic sequences.\n";
-		system "/usr/local/bin/makeblastdb -in $genome -dbtype nucl";
+		system "/home/maohlzj/ncbi-blast-2.2.31+/bin/makeblastdb -in $genome -dbtype nucl";
 		if(-e $genome.".nal"){
 			open in,$genome.".nal" or die "$!\n";
 			open out,'>',$genome.".nal2" or die "$!\n";
@@ -377,7 +377,7 @@ if($step =~/2/ or $step=~/3/){
 if($boundary == 1 && $step=~/1/){
 	my $RGdir="$workdir/RG";
 	mkdir "$RGdir", 0755 or print "cannot create $workdir directory:$!";
-	system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/rg_mainscript.pl $sinefile $genome 5 $RGdir 60 25 $cpu_num >$RGdir/logfile";
+	system "perl ./PL_pipeline/rg_mainscript.pl $sinefile $genome 5 $RGdir 60 25 $cpu_num >$RGdir/logfile";
 	#system "cp -r $workdir/RG .";
 	if(-e "$workdir/RG.error.log"){
 		print "Your genomic dataset has no reasonable SINE candidates\n";
@@ -398,7 +398,7 @@ if($step=~/2/){
 	if($annotation eq ""){
 		if($sinefile ne "" and -e $sinefile and -s $sinefile and -f $sinefile){
 			print "Step Two: SINE Verification.\n";
-			system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/mainpipeline.pl $sinefile $genome $min_copy_num $workdir $extend_size $end_size $min_D $max_flank $min_M $min_con $siteLen $H_block $H_sites $cpu_num >$logfile2";
+			system "perl ./PL_pipeline/mainpipeline.pl $sinefile $genome $min_copy_num $workdir $extend_size $end_size $min_D $max_flank $min_M $min_con $siteLen $H_block $H_sites $cpu_num >$logfile2";
 			print "Finish Step Two.\n";
 		}else{
 			print "Step Two: Could not read SINE candidate file $sinefile. Please check this file. Stop.\n";
@@ -436,7 +436,7 @@ if($step=~/3/){
 	my $out_anno=$line.".anno";
 	if($anno_file ne "" and -e $anno_file and -s $anno_file and -f $anno_file){
 		print "Step Three: SINE classification and genome-wide annotation!\n";
-		system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/SINEs-annotation.pl -i $anno_file -g $genome -o $out_anno -n $name -z $outputDir -D $B_identity -c $cutoff -a $cdlength -e $RNAi -p $RNAc -k $cpu_num -l $logfile3";
+		system "perl ./PL_pipeline/SINEs-annotation.pl -i $anno_file -g $genome -o $out_anno -n $name -z $outputDir -D $B_identity -c $cutoff -a $cdlength -e $RNAi -p $RNAc -k $cpu_num -l $logfile3";
 		print "Finish Step Three.\n";
 	}else{
 		print "Step Three: Cannot read validated SINE candidate file. Stop.\n";

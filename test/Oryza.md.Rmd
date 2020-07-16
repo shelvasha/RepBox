@@ -197,6 +197,7 @@ bedtools intersect -a /Users/shelvasha/Documents/Dissertation/results/results_Or
 Oryza_EA_HS <- read.delim("Oryza_EA_HS_overlap.gff3")
 names(Oryza_EA_HS)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
 Oryza_EA_HS
+write.table(Oryza_EA_HS, file="Oryza_EAHelitron-Helitronscanner_comparision.txt", quote=FALSE, row.names=FALSE, col.names=FALSE)
 ```
 
 
@@ -293,7 +294,7 @@ bedtools intersect -a /Users/shelvasha/Documents/Dissertation/results/results_Or
 ```{r}
 Oryza_MT_MF <- read.delim("Oryza_MT_MF_overlap.gff3")
 names(Oryza_MT_MF)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
-Oryza_MT_MF
+write.table(Oryza_MT_MF, file="Oryza_MITEFinder-MITETracker_comparision.txt", quote=FALSE, row.names=FALSE, col.names=FALSE)
 ```
 #################################################################################
 

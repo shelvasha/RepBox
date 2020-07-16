@@ -1,0 +1,371 @@
+---
+title: "Arabidopsis thaliana GFF characterization"
+output: markdown
+---
+
+# Color Palette
+# #2B3042
+# #6B8C7A
+# #BDB08D
+# #EBD095
+# #EE9295
+
+#################################################################################
+
+# Library Initiation
+```{r}
+library("dplyr")
+library("chromPlot")
+library("stringr")
+library("reticulate")
+library("rtracklayer")
+```
+
+### Reference GFF
+```{r}
+Arabidopsis_ref <- read.delim("/Users/shelvasha/Documents/Dissertation/R Scripts/TAIR10_GFF3_genes_transposons.gff", header=FALSE)
+names(Arabidopsis_ref)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
+Arabidopsis_ref$Chrom <- str_replace(Arabidopsis_ref$Chrom, "Chr0","")
+Arabidopsis_ref$Chrom <- str_replace(Arabidopsis_ref$Chrom, "Chr","")
+Arabidopsis_ref <- rbind(Arabidopsis_ref[which (Arabidopsis_ref$Type=='transposable_element'),],Arabidopsis_ref[which (Arabidopsis_ref$Type=='tRNA'),],Arabidopsis_ref[which (Arabidopsis_ref$Type=='rRNA'),] )
+export(Arabidopsis_ref,con = "Arabidopsis_TE_reference.gff3", format="gff3")
+
+output0 <- data.frame(str_remove(str_split(str_split(toString(Arabidopsis_ref[9][1]),"Name=", simplify = TRUE),",", simplify = TRUE)[,1],'"'))
+output0 <- data.frame(output0[2:nrow(output0),])
+output0[nrow(output0),]<- str_sub(output0[nrow(output0),], end=-2)
+write.table(output0, file="Arabidopsis_REF.txt", quote=FALSE, row.names=FALSE, col.names=FALSE)
+
+use_python("/usr/local/bin/python3")
+```
+
+```{python}
+AT_TE_dictionary={'ATCOPIA28':'LTR/Copia','ATRE1':'LTR/Copia','ATCOPIA41':'LTR/Copia','ATCOPIA86':'LTR/Copia','ATCOPIA59':'LTR/Copia','ATCOPIA38A':'LTR/Copia','ATCOPIA65':'LTR/Copia','ATCOPIA32':'LTR/Copia','ATCOPIA45':'LTR/Copia','ATCOPIA65A':'LTR/Copia','ATCOPIA42':'LTR/Copia','ATCOPIA62':'LTR/Copia','ATCOPIA58':'LTR/Copia','ATCOPIA22':'LTR/Copia','ATCOPIA14':'LTR/Copia','ATCOPIA68':'LTR/Copia','ATCOPIA40':'LTR/Copia','ATCOPIA75':'LTR/Copia','ATCOPIA8B':'LTR/Copia','ATCOPIA36':'LTR/Copia','ATCOPIA10':'LTR/Copia','ATCOPIA6':'LTR/Copia','ATCOPIA23':'LTR/Copia','ATCOPIA37':'LTR/Copia','ATCOPIA15':'LTR/Copia','ATCOPIA18A':'LTR/Copia','ATCOPIA82':'LTR/Copia','ATCOPIA77':'LTR/Copia','ATCOPIA97':'LTR/Copia','ATCOPIA74':'LTR/Copia','ATCOPIA56':'LTR/Copia','ATCOPIA18':'LTR/Copia','ATCOPIA19':'LTR/Copia','ATCOPIA57':'LTR/Copia','ATCOPIA31A':'LTR/Copia','ATCOPIA3':'LTR/Copia','ATCOPIA88':'LTR/Copia','ATCOPIA64':'LTR/Copia','ATCOPIA55':'LTR/Copia','ATCOPIA2':'LTR/Copia','ATCOPIA54':'LTR/Copia','ATCOPIA69':'LTR/Copia','ATCOPIA60':'LTR/Copia','ATCOPIA31':'LTR/Copia','ATCOPIA70':'LTR/Copia','ATCOPIA78':'LTR/Copia','ATCOPIA38B':'LTR/Copia','ATCOPIA89':'LTR/Copia','ATCOPIA48':'LTR/Copia','ATCOPIA25':'LTR/Copia','ATCOPIA32B':'LTR/Copia','ATCOPIA27':'LTR/Copia','ATCOPIA52':'LTR/Copia','ATCOPIA11':'LTR/Copia','ATCOPIA7':'LTR/Copia','ATCOPIA76':'LTR/Copia','ATCOPIA51':'LTR/Copia','ATCOPIA24':'LTR/Copia','ATCOPIA21':'LTR/Copia','ATCOPIA96':'LTR/Copia','ATCOPIA1':'LTR/Copia','ATCOPIA91':'LTR/Copia','ATCOPIA53':'LTR/Copia','ATCOPIA5':'LTR/Copia','ATCOPIA80':'LTR/Copia','ATCOPIA79':'LTR/Copia','ATCOPIA92':'LTR/Copia','ATCOPIA20':'LTR/Copia','ATCOPIA47':'LTR/Copia','ATCOPIA4':'LTR/Copia','ATCOPIA17':'LTR/Copia','ATCOPIA67':'LTR/Copia','ATCOPIA85':'LTR/Copia','ATCOPIA72':'LTR/Copia','ATCOPIA30':'LTR/Copia','ATCOPIA16':'LTR/Copia','ATCOPIA83':'LTR/Copia','ATCOPIA39':'LTR/Copia','ATCOPIA33':'LTR/Copia','ATCOPIA13':'LTR/Copia','ATCOPIA93':'LTR/Copia','ATCOPIA26':'LTR/Copia','ATCOPIA50':'LTR/Copia','ATCOPIA90':'LTR/Copia','ATCOPIA84':'LTR/Copia','ATCOPIA95':'LTR/Copia','ATCOPIA9':'LTR/Copia','ATCOPIA46':'LTR/Copia','ATCOPIA34':'LTR/Copia','ATCOPIA43':'LTR/Copia','ATCOPIA35':'LTR/Copia','ATCOPIA38':'LTR/Copia','ATCOPIA63':'LTR/Copia','ATCOPIA66':'LTR/Copia','ATCOPIA81':'LTR/Copia','ATCOPIA29':'LTR/Copia','ATCOPIA87':'LTR/Copia','ATCOPIA12':'LTR/Copia','ATCOPIA71':'LTR/Copia','ATCOPIA44':'LTR/Copia','ATCOPIA73':'LTR/Copia','ATCOPIA94':'LTR/Copia','ATCOPIA61':'LTR/Copia','ATCOPIA8A':'LTR/Copia','ATCOPIA49':'LTR/Copia','ATENSPM5':'DNA/En-Spm','ATENSPM7':'DNA/En-Spm','ATENSPM4':'DNA/En-Spm','ATENSPM11':'DNA/En-Spm','ATENSPM1':'DNA/En-Spm','ATENSPM3':'DNA/En-Spm','ATENSPM2':'DNA/En-Spm','ATENSPM8':'DNA/En-Spm','ATENSPM1A':'DNA/En-Spm','ATENSPM9':'DNA/En-Spm','ATENSPM10':'DNA/En-Spm','ATENSPM6':'DNA/En-Spm','ATDNATA1':'DNA/Mariner','ARNOLD1':'DNA/MuDR','ATMU2':'DNA/MuDR','AT9NMU1':'DNA/MuDR','ATMU3N1':'DNA/MuDR','ARNOLD4':'DNA/MuDR','ATMU3':'DNA/MuDR','ARNOLDY1':'DNA/MuDR','ARNOLDY2':'DNA/MuDR','ATMU5':'DNA/MuDR','ATDNA2T9B':'DNA/MuDR','ATMU11':'DNA/MuDR','ATMUN2':'DNA/MuDR','ATMUN1':'DNA/MuDR','ATDNA1T9A':'DNA/MuDR','ATMU8':'DNA/MuDR','ATMU1':'DNA/MuDR','ATMUNX1':'DNA/MuDR','ATDNA2T9A':'DNA/MuDR','ATDNAI27T9B':'DNA/MuDR','ATREP17':'DNA/MuDR','AT9TSD1':'DNA/MuDR','ATREP16':'DNA/MuDR','ATMU6N1':'DNA/MuDR','ARNOLD3':'DNA/MuDR','AT9MU1':'DNA/MuDR','ATMU4':'DNA/MuDR','ATMU6':'DNA/MuDR','ATMU9':'DNA/MuDR','ATMU10':'DNA/MuDR','ATDNAI27T9C':'DNA/MuDR','ATN9_1':'DNA/MuDR','ARNOLD2':'DNA/MuDR','ATDNAI26T9':'DNA/MuDR','ATDNAI27T9A':'DNA/MuDR','ATMU7':'DNA/MuDR','ATDNA2T9C':'DNA/MuDR','ATHPOGON3':'DNA/Pogo','ATHPOGO':'DNA/Pogo','ATHPOGON2':'DNA/Pogo','ATHPOGON1':'DNA/Pogo','ATLINE1_1':'LINE/L1','ATLINE1_3A':'LINE/L1','ATLINE1_2':'LINE/L1','ATLINE1A':'LINE/L1','ATLINE1_5':'LINE/L1','ATLINE1_4':'LINE/L1','ATLINE2':'LINE/L1','ATLINE1_6':'LINE/L1','ATLINEIII':'LINE/L1','ATTIRTA1':'DNA/Tc1','ATREP18':'DNA','ATTIRX1A':'DNA','ATDNA12T3A':'DNA','ATDNA12T3_2':'DNA','ATTIRX1B':'DNA','ATTIRX1D':'DNA','ATTIR16T3A':'DNA','ATREP19':'DNA','ATTIRX1C':'DNA','ATSINE4':'SINE','ATSINE2A':'SINE','ATHATN5':'DNA/HAT','ATHAT3':'DNA/HAT','ATHATN3':'DNA/HAT','ATHAT1':'DNA/HAT','ATHATN3A':'DNA/HAT','ATHATN2':'DNA/HAT','ATHATN1':'DNA/HAT','ATHATN4':'DNA/HAT','ATHAT10':'DNA/HAT','ATHATN9':'DNA/HAT','ATHATN6':'DNA/HAT','ATHATN8':'DNA/HAT','ATHAT2':'DNA/HAT','ATHATN10':'DNA/HAT','ATHATN7':'DNA/HAT','ATHAT7':'DNA/HAT','ATIS112A':'DNA/Harbinger','ATHILA3':'LTR/Gypsy','ATGP1':'LTR/Gypsy','ATLANTYS3':'LTR/Gypsy','ATGP7':'LTR/Gypsy','ATHILA6A':'LTR/Gypsy','ATHILA7A':'LTR/Gypsy','ATGP8':'LTR/Gypsy','ATHILA0_I':'LTR/Gypsy','ATLANTYS2':'LTR/Gypsy','ATGP5':'LTR/Gypsy','ATHILA5':'LTR/Gypsy','ATHILA8B':'LTR/Gypsy','ATHILA6B':'LTR/Gypsy','ATHILA7':'LTR/Gypsy','ATHILA8A':'LTR/Gypsy','ATGP10':'LTR/Gypsy','ATHILA4B_LTR':'LTR/Gypsy','ATHILA4C':'LTR/Gypsy','ATHILA':'LTR/Gypsy','ATHILA4D_LTR':'LTR/Gypsy','ATHILA2':'LTR/Gypsy','ATHILA4':'LTR/Gypsy','ATGP9LTR':'LTR/Gypsy','ATGP2N':'LTR/Gypsy','ATHILA4A':'LTR/Gypsy','ATGP2':'LTR/Gypsy','ATLANTYS1':'LTR/Gypsy','ATGP3':'LTR/Gypsy','ATGP6':'LTR/Gypsy','ATGP9B':'LTR/Gypsy','ATREP5':'RC/Helitron','ATREP8':'RC/Helitron','ATREP9':'RC/Helitron','ATREP10D':'RC/Helitron','ATREP14':'RC/Helitron','ATREP4':'RC/Helitron','ATREP2A':'RC/Helitron','ATREP13':'RC/Helitron','ATREP2':'RC/Helitron','ATREP10C':'RC/Helitron','ATREP11A':'RC/Helitron','ATREP7':'RC/Helitron','ATREP10B':'RC/Helitron','ATREP6':'RC/Helitron','ATREP12':'RC/Helitron','ATREP11':'RC/Helitron','ATREP3':'RC/Helitron','ATREP15':'RC/Helitron','ATREP1':'RC/Helitron','ATREP10A':'RC/Helitron','ATREP10':'RC/Helitron','BRODYAGA2':'DNA/MuDR','BRODYAGA1A':'DNA/MuDR','BRODYAGA1':'DNA/MuDR','BOMZH1':'DNA/MuDR','BOMZH2':'DNA/MuDR','DT1':'DNA/Mariner','DRL1':'DNA/HAT','ENDOVIR1':'LTR/Copia','HARBINGER':'DNA/Harbinger','HELITRONY1B':'RC/Helitron','HELITRONY1E':'RC/Helitron','HELITRON5':'RC/Helitron','HELITRON4':'RC/Helitron','HELITRONY1A':'RC/Helitron','HELITRON3':'RC/Helitron','HELITRONY1C':'RC/Helitron','HELITRONY1D':'RC/Helitron','HELITRONY2':'RC/Helitron','HELITRONY3A':'RC/Helitron','HELITRON1':'RC/Helitron','HELITRON2':'RC/Helitron','HELITRONY3':'RC/Helitron','LIMPET1':'DNA/MuDR','META1':'LTR/Copia','RathE2_cons':'RathE2_cons','ROMANIAT5':'LTR/Copia','RathE3_cons':'RathE3_cons','RathE1_cons':'RathE1_cons','RP1_AT':'DNA','SADHU':'null','SIMPLEHAT2':'DNA/HAT','SIMPLEHAT1':'DNA/HAT','SIMPLEGUY1':'DNA/Harbinger','TA1-2':'LTR/Copia','TA12':'LINE/L1','TA11':'LINE/L1','TSCL':'LINE?','TNAT1A':'DNA','TNAT2A':'DNA','TAG2':'DNA/HAT','TAG3N1':'DNA/HAT','TAG1':'DNA/HAT','TAT1_ATH':'LTR/Gypsy','TA1_AT':'LTR/Gypsy','VANDAL9':'DNA/MuDR','VANDAL14':'DNA/MuDR','VANDAL8':'DNA/MuDR','VANDAL6':'DNA/MuDR','VANDAL21':'DNA/MuDR','VANDAL18':'DNA/MuDR','VANDAL15':'DNA/MuDR','VANDAL5A':'DNA/MuDR','VANDAL17':'DNA/MuDR','VANDAL16':'DNA/MuDR','VANDAL4':'DNA/MuDR','VANDALNX2':'DNA/MuDR','VANDAL7':'DNA/MuDR','VANDAL1':'DNA/MuDR','VANDAL12':'DNA/MuDR','VANDAL2':'DNA/MuDR','VANDAL18NA':'DNA/MuDR','VANDAL3':'DNA/MuDR','VANDAL22':'DNA/MuDR','VANDAL13':'DNA/MuDR','VANDALNX1':'DNA/MuDR','VANDAL18NB':'DNA/MuDR','VANDAL1N1':'DNA/MuDR','VANDAL11':'DNA/MuDR','VANDAL10':'DNA/MuDR','VANDAL5':'DNA/MuDR','VANDAL20':'DNA/MuDR','VANDAL2N1':'DNA/MuDR', 'Unassigned':'Other'}
+
+f=open("Arabidopsis_REF.txt")
+line=f.readlines()
+g=open("Arabidopsis_REF_OUT.txt", 'w')
+for lines in line:
+    if "Derives_from" in lines:
+        continue
+        #print("Derived annotation detected!")
+    elif "Derives_from" not in lines:
+        print(lines.split("Alias=")[1], file=g, end='')
+        #print(lines.split("Alias="))
+
+g.close()
+f.close()
+
+
+f=open("Arabidopsis_REF_OUT.txt")
+line=f.readlines()
+g=open("Arabidopsis_REF_OUT2.txt", 'w')
+for lines in line:
+    lines = lines.strip().replace('\n','')
+    print(lines+","+AT_TE_dictionary[lines].strip().replace('\n',''), file=g)
+
+g.close()
+f.close()
+
+
+````
+
+```{r}
+ref_Arabidopsis_profile <- read.delim("Arabidopsis_REF_OUT2.txt",header=FALSE, sep = ",")
+ref_Arabidopsis_profile <- data.frame(table(ref_Arabidopsis_profile[,2]))
+names(ref_Arabidopsis_profile) <- c("Transposon Family","Count")
+ref_Arabidopsis_profile
+write.table(ref_Arabidopsis_profile, file="Arabidopsis_ref_TE_profile.txt", quote=FALSE, row.names=FALSE, col.names=TRUE, sep = ",")
+```
+
+### Helitrons
+# Reference GFF
+```{r}
+Arabidopsis_helitron_reference <- Arabidopsis_ref[str_detect(Arabidopsis_ref$Attributes,"HELITRON"),]
+Arabidopsis_helitron_reference_format <- dplyr::select(Arabidopsis_helitron_reference, c(1,4,5))
+export(Arabidopsis_helitron_reference,con="Arabidopsis_helitron_reference.gff3", format="gff3")
+output1 <- data.frame(str_remove(str_split(str_split(toString(Arabidopsis_helitron_reference[9][1]),"Name=", simplify = TRUE),",", simplify = TRUE)[,1],'"'))
+output1 <- data.frame(output1[2:nrow(output1),])
+output1[nrow(output1),]<- str_sub(output1[nrow(output1),], end=-2)
+write.table(output1, file="Arabidopsis_HEL.txt", quote=FALSE, row.names=FALSE, col.names=FALSE)
+
+use_python("/usr/local/bin/python3")
+```
+
+```{python}
+import os
+# os. getcwd()
+f=open("Arabidopsis_HEL.txt")
+line=f.readlines()
+g=open("Arabidopsis_HEL_OUT.txt", 'w')
+for lines in line:
+    if "=" in lines:
+        print(lines.split('=')[1], file=g)
+    else:
+        print("Other", file=g)
+        
+g.close()
+````
+
+```{r}
+Arabidopsis_hel_profile <- read.delim("Arabidopsis_HEL_OUT.txt",header=FALSE)
+Arabidopsis_hel_profile <- data.frame(table(Arabidopsis_hel_profile))
+names(Arabidopsis_hel_profile) <- c("Transposon Family","Count")
+Arabidopsis_hel_profile
+write.table(Arabidopsis_hel_profile, file="Arabidopsis_HEL_profile.txt", quote=FALSE, row.names=FALSE, col.names=TRUE, sep=",")
+
+```
+
+# EAHelitron GFF
+```{r}
+Arabidopsis_ea_helitron_gff <- read.delim("/Users/shelvasha/Documents/Dissertation/results/results_Arabidopsis_thaliana/eahelitron_out/EAHeli_out.gff3", header = FALSE,sep = "\t")
+names(Arabidopsis_ea_helitron_gff)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
+Arabidopsis_ea_helitron_gff <- Arabidopsis_ea_helitron_gff[2:nrow(Arabidopsis_ea_helitron_gff),]
+Arabidopsis_ea_helitron_gff_format <- dplyr::select(Arabidopsis_ea_helitron_gff,c(1,4,5))
+```
+
+# HelitronScanner GFF
+```{r}
+Arabidopsis_helitron_scanner_gff <- read.delim("/Users/shelvasha/Documents/Dissertation/results/results_Arabidopsis_thaliana/helitronscanner_out/helitronscanner_out.Arabidopsis_thaliana.hel.gff3", header = FALSE)
+names(Arabidopsis_helitron_scanner_gff)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
+Arabidopsis_helitron_scanner_gff <- Arabidopsis_helitron_scanner_gff[2:nrow(Arabidopsis_helitron_scanner_gff),]
+Arabidopsis_helitron_scanner_gff_format <- dplyr::select(Arabidopsis_helitron_scanner_gff,c(1,4,5))
+```
+
+#### Helitron Comparisons
+```{bash}
+## EAHelitron - Reference
+# Bash commands
+bedtools intersect -a /Users/shelvasha/Documents/Dissertation/R\ Scripts/Arabidopsis_TE_reference.gff3 -b /Users/shelvasha/Documents/Dissertation/results/results_Arabidopsis_thaliana/eahelitron_out/EAHeli_out.gff3 -f 0.8> Arabidopsis_ref_Helitron_EAHelitron_overlap.gff3
+
+## HelitronScanner - Reference
+# Bash commands
+bedtools intersect -a /Users/shelvasha/Documents/Dissertation/R\ Scripts/Arabidopsis_TE_reference.gff3 -b /Users/shelvasha/Documents/Dissertation/results/results_Arabidopsis_thaliana/helitronscanner_out/Arabidopsis_thaliana.hel.gff3 -f 0.8 > Arabidopsis_ref_Helitron_HelitronScanner_overlap.gff3
+```
+
+```{r}
+# EAHelitron
+Arabidopsis_ref_EAHelitron_compare <- read.delim("Arabidopsis_ref_Helitron_EAHelitron_overlap.gff3",header=FALSE)
+names(Arabidopsis_ref_EAHelitron_compare)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
+Arabidopsis_ref_EAHelitron_compare_format <- dplyr::select(Arabidopsis_ref_EAHelitron_compare, c(1,4,5))
+#EAplot <- chromPlot(annot1 = Arabidopsis_ref_EAHelitron_compare_format)
+
+# HelitronScanner
+Arabidopsis_ref_HelitronScanner_compare <- read.delim("Arabidopsis_ref_Helitron_HelitronScanner_overlap.gff3",header=FALSE)
+names(Arabidopsis_ref_HelitronScanner_compare)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
+Arabidopsis_ref_HelitronScanner_compare_format <- dplyr::select(Arabidopsis_ref_HelitronScanner_compare, c(1,4,5))
+HSplot <- chromPlot(annot1 = Arabidopsis_ref_HelitronScanner_compare_format)
+
+```
+
+# Helitron Counts & Comparisons of novel Software
+```{r}
+Arabidopsis_ea_helitron_count <- nrow(Arabidopsis_ea_helitron_gff)
+Arabidopsis_helitron_scanner_count <- nrow(Arabidopsis_helitron_scanner_gff)
+Arabidopsis_ref_helitron_count <- nrow(Arabidopsis_helitron_reference)
+barplot(cbind(Arabidopsis_ref_helitron_count,Arabidopsis_ea_helitron_count, Arabidopsis_helitron_scanner_count))
+Arabidopsis_helitron_table <- data.frame(rbind(Arabidopsis_ref_helitron_count,Arabidopsis_ea_helitron_count, Arabidopsis_helitron_scanner_count))
+```
+
+```{bash}
+bedtools intersect -a /Users/shelvasha/Documents/Dissertation/results/results_Arabidopsis_thaliana/eahelitron_out/EAHeli_out.gff3 -b /Users/shelvasha/Documents/Dissertation/results/results_Arabidopsis_thaliana/helitronscanner_out/helitronscanner_out.Arabidopsis_thaliana.hel.gff3 -u > Arabidopsis_EA_HS_overlap.gff3
+```
+
+```{r}
+Arabidopsis_EA_HS <- read.delim("Arabidopsis_EA_HS_overlap.gff3")
+names(Arabidopsis_EA_HS)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
+Arabidopsis_EA_HS
+```
+
+#################################################################################
+
+#### MITEs
+# Reference
+```{r}
+mite_filter <- read.delim("Arabidopsis_REF_OUT2.txt", header = FALSE, sep = ",")
+mite_filter <-unique(mite_filter[which (str_detect(mite_filter$V2,"DNA")),])
+
+Arabidopsis_mite_reference <- c()
+
+for (i in 1:nrow(mite_filter)) {
+    #print(i)
+    Arabidopsis_mite_reference = rbind(Arabidopsis_mite_reference, Arabidopsis_ref[which(str_detect(Arabidopsis_ref$Attributes, fixed(mite_filter$V1[i]) )),])
+}
+
+
+
+#mite_reference <- Arabidopsis_ref[which(str_detect(Arabidopsis_ref$Attributes, mite_filter$V1[,1]),arr.ind = TRUE),]
+
+library("rtracklayer")
+export(Arabidopsis_mite_reference,con="Oryza_mite_reference.gff3", format="gff3")
+output2 <- data.frame(str_remove(str_split(str_split(toString(Arabidopsis_mite_reference[9][1]),"Name=", simplify = TRUE),",", simplify = TRUE)[,1],'"'))
+output2 <- data.frame(output2[2:nrow(output2),])
+output2[nrow(output2),]<- str_sub(output2[nrow(output2),], end=-2)
+write.table(output2, file="Arabidopsis_DNA.txt", quote=FALSE, row.names=FALSE, col.names=FALSE)
+
+use_python("/usr/local/bin/python3")
+```
+
+```{python}
+import os
+f=open("Arabidopsis_DNA.txt")
+line=f.readlines()
+g=open("Arabidopsis_DNA_OUT.txt", 'w')
+for lines in line:
+    if "Alias=" in lines:
+        print(lines.split('Alias=')[1], file=g, end='')
+    else:
+        print("Other", file=g)
+
+g.close()
+````
+
+```{r}
+Arabidopsis_dna_profile <- read.delim("Arabidopsis_DNA_OUT.txt",header=FALSE)
+Arabidopsis_dna_profile <- data.frame(table(Arabidopsis_dna_profile))
+names(Arabidopsis_dna_profile) <- c("Transposon Family","Count")
+Arabidopsis_dna_profile
+
+write.table(Arabidopsis_dna_profile, file="Arabidopsis_DNA_TE_profile.txt", quote=FALSE, row.names=FALSE, sep = ",")
+```
+
+# MITETracker GFF3 - Parsing
+```{r}
+Arabidopsis_mitetracker <- read.delim("/Users/shelvasha/Documents/Dissertation/results/results_Arabidopsis_thaliana/mitetracker_out/Arabidopsis_thaliana/all.gff3",header=FALSE)
+Arabidopsis_mitetracker <- Arabidopsis_mitetracker[2:nrow(Arabidopsis_mitetracker),]
+names(Arabidopsis_mitetracker)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
+```
+
+# MITEFinder GFF3
+```{r}
+Arabidopsis_mitefinder <- read.delim("/Users/shelvasha/Documents/Dissertation/results/results_Arabidopsis_thaliana/mitefinder_out/mitefinder.gff3",header=FALSE)
+Arabidopsis_mitefinder <- Arabidopsis_mitefinder[2:nrow(Arabidopsis_mitefinder),]
+names(Arabidopsis_mitefinder)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
+```
+
+### GFF Comparisons
+```{bash}
+## MITETracker - Reference
+# Bash commands
+bedtools intersect -a /Users/shelvasha/Documents/Dissertation/R\ Scripts/Arabidopsis_TE_reference.gff3 -b /Users/shelvasha/Documents/Dissertation/results/results_Arabidopsis_thaliana/mitetracker_out/Arabidopsis_thaliana/all.gff3 -f 0.8 > Arabidopsis_ref_MITE_MITETracker_overlap.gff3
+
+## MITEFinder - Reference
+# Bash commands
+bedtools intersect -a /Users/shelvasha/Documents/Dissertation/R\ Scripts/Arabidopsis_TE_reference.gff3 -b /Users/shelvasha/Documents/Dissertation/results/results_Arabidopsis_thaliana/mitefinder_out/mitefinder.gff3 -f 0.8 > Arabidopsis_ref_MITE_MITEFinder_overlap.gff3
+```
+
+```{r}
+# MITETracker
+ref_MT_compare <- read.delim("Arabidopsis_ref_MITE_MITETracker_overlap.gff3",header=FALSE)
+names(ref_MT_compare)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
+ref_MT_compare_format <- dplyr::select(ref_MT_compare, c(1,4,5))
+#MTplot <- chromPlot(annot1 = ref_MT_compare_format)
+
+# MITEFinder
+ref_MF_compare<- read.delim("Arabidopsis_ref_MITE_MITEFinder_overlap.gff3", header = FALSE)
+names(ref_MF_compare)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
+ref_MF_compare_format <- dplyr::select(ref_MF_compare, c(1,4,5))
+#MFplot <- chromPlot(annot1 = ref_MF_compare_format)
+```
+
+# MITE Counts
+```{r}
+Arabidopsis_mitefinder_count <- nrow(Arabidopsis_mitefinder)
+Arabidopsis_mitetracker_count <- nrow(Arabidopsis_mitetracker)
+Arabidopsis_mite_reference_count <- nrow(Arabidopsis_mite_reference)
+barplot(cbind(Arabidopsis_mite_reference_count, Arabidopsis_mitefinder_count, Arabidopsis_mitetracker_count))
+```
+
+```{bash}
+bedtools intersect -a /Users/shelvasha/Documents/Dissertation/results/results_Arabidopsis_thaliana/mitetracker_out/Arabidopsis_thaliana/all.gff3 -b /Users/shelvasha/Documents/Dissertation/results/results_Arabidopsis_thaliana/mitefinder_out/mitefinder.gff3 -u > Arabidopsis_MT_MF_overlap.gff3
+```
+
+```{r}
+Arabidopsis_MT_MF <- read.delim("Arabidopsis_MT_MF_overlap.gff3")
+names(Arabidopsis_MT_MF)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
+Arabidopsis_MT_MF
+```
+
+
+
+
+#################################################################################
+
+
+#### SINEs
+# Reference
+```{r}
+Arabidopsis_sine_reference <- Arabidopsis_ref[str_detect(Arabidopsis_ref$Attributes,"#SINE"),]
+export(Arabidopsis_sine_reference,con="Oryza_sine_reference.gff3", format="gff3")
+output3 <- data.frame(str_remove(str_split(str_split(toString(sine_reference[9][1]),"Name=", simplify = TRUE),",", simplify = TRUE)[,1],'"'))
+output3 <- data.frame(output3[2:nrow(output3),])
+output3[nrow(output3),]<- str_sub(output3[nrow(output3),], end=-2)
+write.table(output3, file="SINE.txt", quote=FALSE, row.names=FALSE, col.names=FALSE)
+
+use_python("/usr/local/bin/python3")
+```
+
+```{python}
+import os
+# os. getcwd()
+f=open("SINE.txt")
+line=f.readlines()
+g=open("SINE_OUT.txt", 'w')
+for lines in line:
+    if "#" in lines:
+        print(lines.split('#')[1], file=g)
+    else:
+        print("Other", file=g)
+
+g.close()
+````
+
+```{r}
+sine_profile <- read.delim("SINE_OUT.txt",header=FALSE)
+sine_profile <- data.frame(table(sine_profile))
+names(sine_profile) <- c("Transposon Family","Count")
+sine_profile
+```
+
+# SINE_Scan GFF3 - Parsing
+```{r}
+sinescan <- read.delim("",header=FALSE)
+names(sinescan)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
+```
+
+### GFF Comparisons
+```{bash}
+## SineScan - Reference
+# Bash commands:
+bedtools intersect -a  -b  > Arabidopsis_ref_SINE_overlap.gff3
+```
+
+```{r}
+# SINEScan
+Arabidopsis_ref_sinescan_compare <- read.delim("",header=FALSE)
+names(Arabidopsis_ref_sinescan_compare)[1:9] <- c("Chrom","Source","Type","Start","End","Score","Strand","Phase","Attributes")
+Arabidopsis_ref_sinescan_compare_format <- dplyr::select(Arabidopsis_ref_sinescan_compare, c(1,4,5))
+Splot <- chromPlot(annot1 = Arabidopsis_ref_sinescan_compare_format)
+```
+
+# SINE Counts
+```{r}
+sinescan_count <- nrow()
+sine_reference_count <- nrow()
+barplot(cbind(, ))
+```
+
+
+
+
+```{r}
+chromosomes=as.vector(unique(Arabidopsis_EA_HS$Chrom))
+i=0
+for (i in 1:length(chromosomes)){
+    
+    a <-  Arabidopsis_MT_MF[which(Arabidopsis_MT_MF$Chrom==chromosomes[i]),]$End - Arabidopsis_MT_MF[which(Arabidopsis_MT_MF$Chrom==chromosomes[i]),]$Start
+    print(a)
+    #print (cat("Chromosome:",chromosomes[i], a))
+
+}
+```
+

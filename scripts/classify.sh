@@ -29,10 +29,10 @@ mkdir consensus_out
 cd $REPBOX_PREFIX/consensus_out
 DIRECTORY=$(pwd)
 
-LIBRARY1=$REPBOX_PREFIX/repeatmodeler_out/RM*/consensi.fa.classified
-LIBRARY2=$REPBOX_PREFIX/sinescan_out/*.sine.fa.clean.classified
-LIBRARY3=$REPBOX_PREFIX/mitefinder_out/*.mite_finder.out.clean.classified
-LIBRARY4=$REPBOX_PREFIX/helitronscanner_out/*.hel.fa.clean.classified
+LIBRARY1=$REPBOX_PREFIX/repeatmodeler_out/RM*/consensi.fa
+LIBRARY2=$REPBOX_PREFIX/sinescan_out/*.sine.fa
+LIBRARY3=$REPBOX_PREFIX/mitefinder_out/*.mite_finder.out
+LIBRARY4=$REPBOX_PREFIX/helitronscanner_out/*.hel.fa
 
 ## Concatenation of all classified fasta(s) into one fasta.
 cat $LIBRARY2 $LIBRARY3 $LIBRARY4 > merged-library.fa
@@ -77,7 +77,7 @@ LIBRARY=$(ls $FASTA)
 sleep 3
 
 ## RepeatMasker command and parameters
-RepeatMasker -qq -nolow -no_is -norna -e ncbi -pa $THREAD -lib $LIBRARY -gff -dir $OUTPUT -u $GENOME >repeatmask.log 2>repeatmask.log.2
+RepeatMasker -e ncbi -pa $THREAD -lib $LIBRARY -gff -dir $OUTPUT -u $GENOME >repeatmask.log 2>repeatmask.log.2
 sleep 3
 
 ## Creates summary file of .out

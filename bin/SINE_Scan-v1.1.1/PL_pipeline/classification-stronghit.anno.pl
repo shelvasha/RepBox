@@ -11,10 +11,10 @@ if(@ARGV != 10){
 }
 
 my $script=dirname($0);
-my $te="/Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/SINEBase/SineDatabase.fasta";
+my $te="./SINEBase/SineDatabase.fasta";
 my $genome=$ARGV[0];
 my $prefix=$ARGV[1];
-my $tRNA="/Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/RNABase/RNAsbase.fasta";
+my $tRNA="./RNABase/RNAsbase.fasta";
 my @A=split(/_/,$ARGV[2]);
 #####cd-hit parameters#########
 my $cd_one=$ARGV[3];##identity
@@ -82,7 +82,7 @@ if(!-s $Family){
 	exit 0;
 }
 
-system "/Users/shelvasha/Repbox/bin/cd-hit-v4.6.1/cd-hit -i $Family  -o $Family.cluster -n 10 -c $cd_one -d 0 -r 1 -s $cd_two -aS $cd_two -aL $cd_two";
+system "/home/maohlzj/sine_te/cd-hist/cd-hit-est -i $Family  -o $Family.cluster -n 10 -c $cd_one -d 0 -r 1 -s $cd_two -aS $cd_two -aL $cd_two";
 
 my $line;
 my %cluster=();
@@ -118,7 +118,7 @@ while(defined($line=<IN>)){
 close IN;
 
 my $out=$prefix.".tab";
-system "/usr/local/bin/blastn  -task blastn -query $Family.cluster -db $te -max_target_seqs 100000 -evalue 1e-10 -dust no -outfmt 6 -out $out";
+system "/home/maohlzj/ncbi-blast-2.2.31+/bin/blastn  -task blastn -query $Family.cluster -db $te -max_target_seqs 100000 -evalue 1e-10 -dust no -outfmt 6 -out $out";
 
 open IN,$te or die "$!\n";
 my %length=();
@@ -295,7 +295,7 @@ foreach my $j (keys%seqs_unmapped){
 		my $B=length($trna{$k});
 		print OUT_2">$k\n$trna{$k}\n";	
 		close OUT_2;
-		system "/usr/local/bin/stretcher -asequence $prefix.one.fa -bsequence $prefix.two.fa -outfile $prefix.align -aformat fasta";
+		system "/home/maohlzj/EMBOSS-6.6.0/emboss/stretcher -asequence $prefix.one.fa -bsequence $prefix.two.fa -outfile $prefix.align -aformat fasta";
 #		system "perl Sine_tRNA.pl align $A $B >>$trna_con";
 		my $AlignFile=$prefix.".align";
 		my $align=Bio::AlignIO->new(-file => $AlignFile,-format=>'fasta');

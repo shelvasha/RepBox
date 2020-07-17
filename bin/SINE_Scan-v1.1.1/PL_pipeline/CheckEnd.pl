@@ -1,7 +1,7 @@
 ####here we want to find TSDs and check boundary######
 #!usr/bin/perl
 use strict;
-use lib '/Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/modules';
+use lib './modules';
 use Statistics::Basic qw(:all);
 use File::Basename;
 use Bio::SimpleAlign;
@@ -46,13 +46,13 @@ while($label=<fin>){
 }
 close fout;
 close fin;
-system "/usr/local/bin/muscle -in $outfile.fasta -out $outfile.msa.fasta -maxiters 1 -diags -quiet";
+system "/home/maohlzj/sine_te/softwares/muscle -in $outfile.fasta -out $outfile.msa.fasta -maxiters 1 -diags -quiet";
 ####find 60 50 60 positions in MSA #####
 my @positionA=();
 my @positionB=();
 my $str = Bio::AlignIO->new(-file => "$outfile.msa.fasta");
 my $aln = $str->next_aln();
-my $nseq= $aln->num_sequences;
+my $nseq= $aln->no_sequences;
 foreach my $seq ($aln->each_seq) {
 	my $count=0;
 	for(my $pos=1;$pos<=$aln->length;++$pos){
@@ -106,7 +106,7 @@ sub Similarity{
         my $str = Bio::AlignIO->new(-file => $fl);
         my $aln = $str->next_aln();
 #	print $aln->consensus_string(0)."\n";
-	my $nseq= $aln->num_sequences;
+	my $nseq= $aln->no_sequences;
         my @consensus;
         my @conperc;
         for(my $pos=1;$pos<=$aln->length;++$pos){

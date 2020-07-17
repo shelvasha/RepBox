@@ -47,7 +47,8 @@ $HelitronScanner pairends -hs $INDEXNAME.head -ts $INDEXNAME.tail -hlr 200:20000
 $HelitronScanner draw -p $INDEXNAME.paired -g $GENOME -o helitronscanner_out.$INDEXNAME -pure_helitron
 
 ### Fasta output cleanup and classification
-python3 $REPBOX_PREFIX/util/HSheader.py $REPBOX_PREFIX/helitronscanner_out/helitronscanner_out.$INDEXNAME.hel.fa
-FASTA=$REPBOX_PREFIX/helitronscanner_out/*hel.fa.clean
+#python3 $REPBOX_PREFIX/util/HSheader.py $REPBOX_PREFIX/helitronscanner_out/helitronscanner_out.$INDEXNAME.hel.fa
+#FASTA=$REPBOX_PREFIX/helitronscanner_out/*hel.fa.clean
 
+python $REPBOX_PREFIX/util/helitron_scanner_out_to_tabout.py helitronscanner_out.$INDEXNAME.hel.fa helitronscanner_out.$INDEXNAME.hel.gff3 > helitronscanner_out.$INDEXNAME.hel.gff3
 #perl $HOMEBREW_PREFIX/opt/repeatmodeler/RepeatClassifier -consensi $FASTA -engine ncbi -pa $THREAD

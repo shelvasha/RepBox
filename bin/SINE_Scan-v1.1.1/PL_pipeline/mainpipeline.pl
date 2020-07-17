@@ -30,7 +30,7 @@ print "Create working dir: $workdir\n";
 
 print "\nMake directory for each TE:\n";
 my $filtersines=$ARGV[0];
-system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/makeDirforTE.pl $filtersines  $workdir";
+system "perl ./PL_pipeline/makeDirforTE.pl $filtersines  $workdir";
 open in,$filtersines or die "$!\n";
 my %map=();
 my %chr=();
@@ -92,7 +92,7 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 		print "Its path is: $path\n";
 		print "TE sequence: $path/$name.sine.fa\n";
 		print "Scan genome using a file above: $path/$name.sine.genome.bls\n";
-		system "/usr/local/bin/blastn -task blastn -db $genome -query $path/$name.sine.fa -max_target_seqs 100000 -evalue 1e-10 -dust no -out $path/$name.sine.genome.bls -num_threads $CPU -outfmt 6";
+		system "blastn -task blastn -db $genome -query $path/$name.sine.fa -max_target_seqs 100000 -evalue 1e-10 -dust no -out $path/$name.sine.genome.bls -num_threads $CPU -outfmt 6";
 		open in,"$path/$name.sine.fa" or die "$!\n";
 		my $query_length=0;
 		while(<in>){
@@ -113,11 +113,11 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 				$x[8]=$x[9];
 				$x[9]=$t;
 			}
-			if($x[2]*$x[3]>=80*$query_length && $subject_length>=0.8*$query_length && $subject_length<=$query_length/0.8){ 
+			if($x[2]*$x[3]>=80*$query_length && $subject_length>=0.8*$query_length && $subject_length<=$query_length/0.8){
 				my @a=split(/,/,$chr{$x[1]});
 				foreach my $j (@a){
 					my @A=split(/-/,$j);
-					if($A[0] > $x[9]){		
+					if($A[0] > $x[9]){
 						last;
 					}
 					my $R=($x[8]-$A[1])*($x[9]-$A[0]);
@@ -130,7 +130,7 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 							$chr{$x[1]}=~s/$j,//;
 						}
 					}
-				}	
+				}
 				if($x[6]==1 && $x[7]==$query_length && $x[8]>$sizeFlank && $x[9]+$sizeFlank<$len{$x[1]}){
 					my $number=$cnt;
 					my $iden=$x[2]*$x[3]/100;
@@ -157,23 +157,22 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 			}
 			foreach my $line(reverse sort {$rank{$identity}{$a}<=>$rank{$identity}{$b}} keys%{$rank{$identity}}){ ###identical percentage of subject
 				if($p == 35){
-					$flag=0;
 					last;
 				}else{
 					print fout "$line";
 					$p++;
 				}
-			}	
+			}
 		}
 		close fout;
 
 		print "Extract $p best hits: $path/$name.sine.extendseq\n";
-		system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/extendseq.pl $path/$name.sine.genome.filter $genome $sizeFlank >$path/$name.sine.extendseq";
+		system "perl ./PL_pipeline/extendseq.pl $path/$name.sine.genome.filter $genome $sizeFlank >$path/$name.sine.extendseq";
 
 #####check end ,TSD-finder then output a good seed sequence for next-step (annotation)############
 ###step first: checkend and TSD-finder#######
-		my $scores=`perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/New_checkboundaryAndTSD.pl $path/$name.sine.extendseq $sizeFlank $sizeEnd $minDiff $SupFL $InfM $minIden $maxDis $blockLen $siteP`;
-		system "/usr/local/bin/muscle -in $path/$name.sine.extendseq -out $path/$name.sine.extendseq.msa.fasta -maxiters 1 -diags -quiet";
+		my $scores=`perl ./PL_pipeline/New_checkboundaryAndTSD.pl $path/$name.sine.extendseq $sizeFlank $sizeEnd $minDiff $SupFL $InfM $minIden $maxDis $blockLen $siteP`;
+		system "muscle -in $path/$name.sine.extendseq -out $path/$name.sine.extendseq.msa.fasta -maxiters 1 -diags -quiet";
 		chomp $scores;
 		my @score=split(/,/,$scores);
 		if(@score == 1 && $scores == 1){
@@ -197,7 +196,7 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 		print "You could manually evaluate alignment ends using the $path/$name.sine.extendseq.SixtyFiftySixty.msa.fasta\n";
 		print "cluster $name is ready for inspection\n";
 		if($scores == 1){
-			system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/betterSeq-seeds.pl $path/$name.sine.extendseq";
+			system "perl ./PL_pipeline/betterSeq-seeds.pl $path/$name.sine.extendseq";
 			my $annotation=basename($workdir).".for_annotation.fa";########annotation file in workdir
 			if(-e "$path/$name.sine.for_annotation.fa"){
 				system "cat $path/$name.sine.for_annotation.fa >>$workdir/$annotation";
@@ -209,4 +208,3 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 }
 closedir DH;
 print "\nDone.\n";
-

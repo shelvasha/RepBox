@@ -23,7 +23,7 @@ print "Create working dir: $workdir\n";
 
 print "\nMake directory for each TE:\n";
 my $filtersines=$ARGV[0];
-system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/makeDirforTE.pl $filtersines  $workdir";
+system "perl ./PL_pipeline/makeDirforTE.pl $filtersines  $workdir";
 open in,$filtersines or die "$!\n";
 my %map=();
 my %chr=();
@@ -83,13 +83,13 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 		my $Direction='+';
 		my $path="$workdir/$name";
 		system "cat $path/$name.sine.fa >$path/$name.sine.origin.fa";
-		while(1){	
+		while(1){
 			print "\n-----work on cluster $name-----\n";
 			print "Its path is: $path\n";
 			print "TE sequence: $path/$name.sine.fa\n";
 			print "Scan genome using a file above: $path/$name.sine.genome.bls\n";
-			system "/usr/local/bin/blastn -task blastn -db $genome -query $path/$name.sine.fa -max_target_seqs 100000 -evalue 1e-10 -dust no -out $path/$name.sine.genome.bls -num_threads $cpu_num -outfmt 6";
-		
+			system "blastn -task blastn -db $genome -query $path/$name.sine.fa -max_target_seqs 100000 -evalue 1e-10 -dust no -out $path/$name.sine.genome.bls -num_threads $cpu_num -outfmt 6";
+
 			open in,"$path/$name.sine.fa" or die "$!\n";
 			my $query_length=0;
 			while(<in>){
@@ -126,7 +126,7 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 				}
 			}
 			close fin;
-				
+
 			print "In cycle $cycle,Find $cnt rough good hits with identical percentage more than 80%\n";
 			if($cnt<$minCp){
 				if($cycle == 0){
@@ -163,17 +163,17 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 								my $tmp=$a[8];
 								$a[8]=$a[9];
 								$a[9]=$tmp;
-							}	
+							}
 							$Position="$a[8]-$a[9]";
 						}
-						push @hits,$line; 
+						push @hits,$line;
 						push @start,$a[6];
 						push @stop,$a[7];
 						++$p;
 					}
-				}	
+				}
 			}
-		
+
 			my $n=@hits;
 			@start=sort{$a<=>$b} @start;
 			@stop=sort{$a<=>$b} @stop;
@@ -185,7 +185,7 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 			}else{
 				$median_start=$start[$n/2];
 				$median_stop=$stop[$n/2];
-			}	
+			}
 			my $deta_start=$median_start;
 			my $deta_stop=abs($query_length-$median_stop)+1;
 			my $preflank=$sizeFlank;
@@ -224,18 +224,18 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 			open fout,">$path/$name.sine.genome.filter" or die $!;
 			foreach my $i (@last_input){
 				print fout"$i";
-			}	
+			}
 			close fout;
-			#system "cat $path/$name.sine.genome.filter >$path/$name.$cycle.bls";	
-			
+			#system "cat $path/$name.sine.genome.filter >$path/$name.$cycle.bls";
+
 			print "Extract $p best hits: $path/$name.sine.extendseq\n";
-			system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/extendseq.pl $path/$name.sine.genome.filter $genome $preflank $suffixflank >$path/$name.sine.extendseq";
+			system "perl ./PL_pipeline/extendseq.pl $path/$name.sine.genome.filter $genome $preflank $suffixflank >$path/$name.sine.extendseq";
 			$cycle++;
 
 #####check end then output a good longer (with ends) seed sequence for next-round-searching ############
 ###step first: checkend #######
 			my $New_name="$CHR,$Position,$Direction";
-			my $scores=`perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/RG_boundary.pl $path/$name.sine.extendseq $New_name`;
+			my $scores=`perl ./PL_pipeline/RG_boundary.pl $path/$name.sine.extendseq $New_name`;
 #			my @Position=split(/\s+/,$scores);
 #			print "$Position[0]\t$Position[1]\n";
 #			$scores=abs($Position[1]-$Position[0])+1;
@@ -244,9 +244,9 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 				last;
 			}
 			my $deta=abs($scores-$convergence);
-			$convergence=$scores;	
+			$convergence=$scores;
 			if($deta < 4){
-				my $BD=`perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/CheckEnd.pl $path/$name.sine.extendseq 60 25`;
+				my $BD=`perl ./PL_pipeline/CheckEnd.pl $path/$name.sine.extendseq 60 25`;
 				print "$BD\n";
 				#######Blast-Filter###########
 				open fin,"<$path/$name.sine.genome.bls" or die $!;
@@ -276,36 +276,36 @@ foreach my $name(sort {$a<=>$b} readdir DH){
 										print "$name, it delete $DIR\n";
 										$chr{$x[1]}=~s/$j,//;
 									}
-								}		
-							}		
+								}
+							}
 						}
 					}
 				}
 				close fin;
 				print "The boundaries are stable and jump out the loop.\n";
-				print "Output obvious boundaries in $path/$name.boundary.fa\n";	
+				print "Output obvious boundaries in $path/$name.boundary.fa\n";
 				print "Give Repeat candidates with obvious ends\n";
 				system "rm $path/$name.sine.genome.* ";
 				last;
 			}
 			if($cycle > 3){
-				my $BD=`perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/CheckEnd.pl $path/$name.sine.extendseq 60 25`;
+				my $BD=`perl ./PL_pipeline/CheckEnd.pl $path/$name.sine.extendseq 60 25`;
 				print "$BD\n";
 				print "The number of iteration is large enough and jump out the loop.\n";
 				if($deta > 10){
 					print "this cluster's boundaries perhaps are error, check it manually\n";
 				}
-				print "Output obvious boundaries in $path/$name.boundary.fa\n";	
+				print "Output obvious boundaries in $path/$name.boundary.fa\n";
 				print "Give Repeat candidates with obvious ends\n";
 				system "rm $path/$name.sine.genome.* ";
 				last;
 			}
-###original seeds to genome_scan and use boundary to pairwise alignment,check its quality to determine whether it should be retained######	
+###original seeds to genome_scan and use boundary to pairwise alignment,check its quality to determine whether it should be retained######
 		}
 	}
 }
 if(-s "$workdir/passList"){
-	system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/clusterSeqs.pl $workdir/passList $filtersines";
+	system "perl ./PL_pipeline/clusterSeqs.pl $workdir/passList $filtersines";
 }else{
 	$workdir=~s/RG$//;
 	open out,'>',"$workdir/RG.error.log" or die "$!\n";
@@ -314,4 +314,3 @@ if(-s "$workdir/passList"){
 }
 closedir DH;
 print "\nDone.\n";
-

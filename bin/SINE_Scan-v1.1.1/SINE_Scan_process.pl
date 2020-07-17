@@ -357,7 +357,7 @@ if($step =~/2/ or $step=~/3/){
 		print "Genomic database exists.\n";
 	}else{
 		print "Build BlAST database for the genomic sequences.\n";
-		system "/home/maohlzj/ncbi-blast-2.2.31+/bin/makeblastdb -in $genome -dbtype nucl";
+		system "makeblastdb -in $genome -dbtype nucl";
 		if(-e $genome.".nal"){
 			open in,$genome.".nal" or die "$!\n";
 			open out,'>',$genome.".nal2" or die "$!\n";

@@ -1,7 +1,7 @@
 ########renormalization group to approximate obvious boundaries of specific DNA elements########
 #!usr/bin/perl
 use strict;
-use lib '/Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/modules';
+use lib './modules';
 use Statistics::Basic qw(:all);
 use Bio::SimpleAlign;
 use Bio::AlignIO;
@@ -18,7 +18,7 @@ my $ListNum=$a[-2];
 my ($one,$two)=(dirname($file),basename($file));
 $one=~s/\/$a[-2]//;
 ####global sequences, but I suppose local would be good###
-system "/usr/local/bin/muscle -in $file -out $file.msa.fasta -maxiters 1 -diags -quiet";
+system "/home/maohlzj/sine_te/softwares/muscle -in $file -out $file.msa.fasta -maxiters 1 -diags -quiet";
 my @consensus=Similarity("$file.msa.fasta");
 
 #######boundary detection##########	
@@ -205,7 +205,7 @@ sub Similarity{
         my $str = Bio::AlignIO->new(-file => $fl);
         my $aln = $str->next_aln();
 #	print $aln->consensus_string(0)."\n";
-	my $nseq= $aln->num_sequences;
+	my $nseq= $aln->no_sequences;
         my @consensus;
         my @conperc;
         for(my $pos=1;$pos<=$aln->length;++$pos){

@@ -15,7 +15,7 @@ my $prefix=$ARGV[2];
 my $cpu=$ARGV[3];
 
 print "find all homologous region in genomes\n";
-system "/usr/local/bin/blastn -task blastn -db $genome -query $te -max_target_seqs 100000 -evalue 1e-5 -dust no -out $prefix.te2genome.bls -num_threads $cpu -outfmt 6";
+system "/home/maohlzj/ncbi-blast-2.2.31+/bin/blastn -task blastn -db $genome -query $te -max_target_seqs 100000 -evalue 1e-5 -dust no -out $prefix.te2genome.bls -num_threads $cpu -outfmt 6";
 print "filter blast to get region match >9";
 #system "perl ./PL_pipeline/solar/solar.pl -cCd -1 $prefix.te2genome.bls >$prefix.te2genome.solar";
 open in,$te or die "$!\n";
@@ -48,7 +48,7 @@ close fin;
 close fout;
 
 print "get GFF file\n";
-system "perl /Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/PL_pipeline/bls2gtf.pl $prefix.te2genome.filter >$prefix.te2genome.gtf";
+system "perl ./PL_pipeline/bls2gtf.pl $prefix.te2genome.filter >$prefix.te2genome.gtf";
 
 
 my $gff=basename("$prefix.te2genome.gtf");
@@ -59,11 +59,11 @@ if(!-s "$prefix.te2genome.gtf"){
 print "Sort GFF file\n"; 
 system "sort -k1,1 -k4,4n $prefix.te2genome.gtf >$prefix.sortGFF";
 print "Merge overlapping regions using bedtools\n";
-system "/usr/local/bin/bedtools merge -i $prefix.sortGFF >$prefix.mergebed";
+system "/home/maohlzj/sine_te/softwares/bedtools2/bin/bedtools merge -i $prefix.sortGFF >$prefix.mergebed";
 print "Get sequences of these merge regions\n";
-system "/usr/local/bin/bedtools getfasta -fi $genome -bed $prefix.mergebed -fo $prefix.mergebed.fasta";
+system "/home/maohlzj/sine_te/softwares/bedtools2/bin/bedtools getfasta -fi $genome -bed $prefix.mergebed -fo $prefix.mergebed.fasta";
 print "Blast these merged region to TE base. Only the first best hit is kept\n";
-system "/usr/local/bin/blastn -task blastn -db $te -query $prefix.mergebed.fasta -max_target_seqs 1 -evalue 1e-5 -out $prefix.mergebed.TEBase.bls -num_threads $cpu -outfmt 6";
+system "/home/maohlzj/ncbi-blast-2.2.31+/bin/blastn -task blastn -db $te -query $prefix.mergebed.fasta -max_target_seqs 1 -evalue 1e-5 -out $prefix.mergebed.TEBase.bls -num_threads $cpu -outfmt 6";
 print "Get info of best hits (blast output format)\n";
 #system "perl ./PL_pipeline/solar/solar.pl $prefix.mergebed.TEBase.bls >$prefix.assignRegionToTE";
 ###read length###

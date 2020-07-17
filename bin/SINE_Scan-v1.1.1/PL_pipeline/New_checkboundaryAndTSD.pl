@@ -1,7 +1,7 @@
 ####here we want to find TSDs and check boundary######
 #!usr/bin/perl
 use strict;
-use lib '/Users/shelvasha/Repbox/bin/SINE_Scan-v1.1.1/modules';
+use lib './modules';
 use Statistics::Basic qw(:all);
 use Bio::SimpleAlign;
 use Bio::AlignIO;
@@ -54,13 +54,13 @@ while($label=<fin>){
 }
 close fout;
 close fin;
-system "/usr/local/bin/muscle -in $outfile.fasta -out $outfile.msa.fasta -maxiters 1 -diags -quiet";
+system "/home/maohlzj/sine_te/softwares/muscle -in $outfile.fasta -out $outfile.msa.fasta -maxiters 1 -diags -quiet";
 ####find 60 50 60 positions in MSA #####
 my @positionA=();
 my @positionB=();
 my $str = Bio::AlignIO->new(-file => "$outfile.msa.fasta");
 my $aln = $str->next_aln();
-my $nseq= $aln->num_sequences;
+my $nseq= $aln->no_sequences;
 foreach my $seq ($aln->each_seq) {
 	my $count=0;
 	for(my $pos=1;$pos<=$aln->length;++$pos){
@@ -234,7 +234,7 @@ if($SINEs == 1){
 		}
 	}
 	my $counter=0;
-	my $nseq= $aln->num_sequences;
+	my $nseq= $aln->no_sequences;
 	my %order=();########each sequence 's name - boundary position#########
 	my $toolong=0;
 	foreach my $seq ($aln->each_seq) {
@@ -303,7 +303,7 @@ if($SINEs == 1){
 			open fout, ">$file.tsd.fa" or die "$!\n";
 			print fout">one\n$ser\n>two\n$Ser\n";
 			close fout;
-			system "/usr/local/bin/muscle -in $file.tsd.fa -out $file.tsd.msa.fasta -maxiters 1 -diags -quiet";
+			system "/home/maohlzj/sine_te/softwares/muscle -in $file.tsd.fa -out $file.tsd.msa.fasta -maxiters 1 -diags -quiet";
 			if(! -e "$file.tsd.msa.fasta"){
 				next;
 			}
@@ -356,7 +356,7 @@ sub Similarity{
         my $str = Bio::AlignIO->new(-file => $fl);
         my $aln = $str->next_aln();
 #	print $aln->consensus_string(0)."\n";
-	my $nseq= $aln->num_sequences;
+	my $nseq= $aln->no_sequences;
         my @consensus;
         my @conperc;
         for(my $pos=1;$pos<=$aln->length;++$pos){
@@ -397,7 +397,7 @@ sub MITE_test{
 	open out,">$file.mite.test.fa" or die "$!\n";
 	print out">1\n$head\n>2\n$tail\n";
 	close out;
-	system "/usr/local/bin/muscle -in $file.mite.test.fa -out $file.mite.fasta -maxiters 1 -diags -quiet";
+	system "/home/maohlzj/sine_te/softwares/muscle -in $file.mite.test.fa -out $file.mite.fasta -maxiters 1 -diags -quiet";
 	if(! -e "$file.mite.fasta"){
 		return 0;
 	}

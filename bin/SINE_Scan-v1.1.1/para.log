@@ -1,8 +1,8 @@
 step=123
-genome=/Users/shelvasha/Repbox/sinescan_out/Arabidopsis_thaliana.TAIR10.dna.chromosome.4.fasta
+genome=/Users/shelvasha/Repbox/sinescan_out/Arabidopsis_thaliana.TAIR10.dna.toplevel.fasta
 workdir=/Users/shelvasha/Repbox/sinescan_out
 name=Arabidopsis_thaliana
-infile=/Users/shelvasha/Repbox/sinescan_out/Arabidopsis_thaliana.TAIR10.dna.chromosome.4.sine.fa
+infile=/Users/shelvasha/Repbox/sinescan_out/Arabidopsis_thaliana.TAIR10.dna.toplevel.sine.fa
 annotation=/Users/shelvasha/Repbox/sinescan_out/sinescan_out.for_annotation.fa
 min_copy_num=5
 extend_size=60

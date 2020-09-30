@@ -14,3 +14,5 @@ for record in SeqIO.parse(args.mfilename, "fasta"):
     print(">" + name, file=sample)
     print(sequence, file=sample)
 sample.close()
+
+# grep -rl "|" ori_Avena_eriantha.fa.out.gff | xargs sed -i "" 's/|/_/g'

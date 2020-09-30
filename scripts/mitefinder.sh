@@ -33,7 +33,7 @@ cd mitefinder_out
 
 ### Runs MITEFinder using program defaults
 miteFinder="$REPBOX_PREFIX/bin/miteFinder/miteFinder"
-$miteFinder -input $GENOME -output $INDEXNAME.mite_finder.out -pattern_scoring $REPBOX_PREFIX/bin/miteFinder/profile/pattern_scoring.txt -threshold 0.2
+$miteFinder -input $GENOME -output $INDEXNAME.mite_finder.out -pattern_scoring $REPBOX_PREFIX/bin/miteFinder/profile/pattern_scoring.txt -threshold 0.0
 
 ### Fasta output cleanup and classification
 python3 $REPBOX_PREFIX/util/MFheader.py $REPBOX_PREFIX/mitefinder_out/*.mite_finder.out

@@ -29,21 +29,19 @@ mkdir consensus_out
 cd $REPBOX_PREFIX/consensus_out
 DIRECTORY=$(pwd)
 
-LIBRARY1=$REPBOX_PREFIX/repeatmodeler_out/RM*/consensi.fa
-LIBRARY2=$REPBOX_PREFIX/sinescan_out/*.sine.fa
-LIBRARY3=$REPBOX_PREFIX/mitefinder_out/*.mite_finder.out
-LIBRARY4=$REPBOX_PREFIX/helitronscanner_out/*.hel.fa
+LIBRARY1=$REPBOX_PREFIX/repeatmodeler_out/RM*/consensi.fa.classified
+LIBRARY2=$REPBOX_PREFIX/sinescan_out/*.sine.fa.clean
+LIBRARY3=$REPBOX_PREFIX/mitefinder_out/*.mite_finder.out.clean
+LIBRARY4=$REPBOX_PREFIX/helitronscanner_out/*.hel.fa.clean
 
 ## Concatenation of all classified fasta(s) into one fasta.
-cat $LIBRARY2 $LIBRARY3 $LIBRARY4 > merged-library.fa
+cat $LIBRARY1 $LIBRARY2 $LIBRARY3 $LIBRARY4 > merged-library.fa
 
 ### Clustering - Classified repeats are merged into single
 ## Consensus fasta based on >=80% similarity of sequences
 vsearch -sortbylength merged-library.fa --output merged-library.sorted.fa --log vsearch.log
 vsearch -cluster_fast merged-library.sorted.fa --id 0.80 --centroids my_centroids.fa --uc result.uc -consout final.nr.consensus.fa -msaout aligned.fasta --log vsearch2.log
 sed 's/centroid=*//' final.nr.consensus.fa | sed  's/;seqs=[0-9]*$//' > final.nr.consensus_edit.fa
-cat $LIBRARY1 final.nr.consensus_edit.fa > final.nr.consensus_edit.fa.tmp
-rm final.nr.consensus_edit.fa && mv final.nr.consensus_edit.fa.tmp final.nr.consensus_edit.fa
 
 ### Classification of consensus fasta
 FASTA=$REPBOX_PREFIX/consensus_out/final.nr.consensus_edit.fa

@@ -1,0 +1,8 @@
+{'HelitronScanner':'/Users/shelburkes/RepBox/bin/HelitronScanner_V1.0/HelitronScanner/HelitronScanner.jar'}
+{'miteFinder':'/Users/shelburkes/RepBox/bin/miteFinder/bin/miteFinder'}
+{'RepeatMasker':'/Users/shelburkes/RepBox/bin/RepeatMasker/RepeatMasker'}
+{'RepeatModeler':'/Users/shelburkes/RepBox/bin/RepeatModeler-2.0.1/RepeatModeler'}
+{'RepeatClassifier':'/Users/shelburkes/RepBox/bin/RepeatModeler-2.0.1/RepeatClassifier'}
+{'BuildDatabase':'/Users/shelburkes/RepBox/bin/RepeatModeler-2.0.1/BuildDatabase'}
+{'SineScan':'/Users/shelburkes/RepBox/bin/SINE_Scan-v1.1.1/SINE_Scan_process.pl'}
+{'VSEARCH':'/Users/shelburkes/RepBox/bin/vsearch-2.22.1-macos-aarch64/bin/vsearch'}
